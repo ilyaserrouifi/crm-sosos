@@ -1,128 +1,112 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leads — CRM</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Leads — CRM NiChe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; }
-    .nav-item:hover { background: #0d1628; color: #e0eaff; }
-    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
-    .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; }
-    .logout:hover { background: #2a1a1a; }
-    .main { margin-right: 220px; padding: 32px; flex: 1; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .topbar h1 { font-size: 22px; font-weight: 600; }
-    .btn { background: #1a6bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
-    .btn:hover { opacity: 0.85; }
-    .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .col { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 16px; min-height: 400px; }
-    .col-header { font-size: 13px; font-weight: 500; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #0e2040; display: flex; justify-content: space-between; align-items: center; }
-    .col-count { background: #0d1628; color: #6a85aa; font-size: 11px; padding: 2px 8px; border-radius: 20px; }
-    .lead-card { background: #0d1628; border: 1px solid #0e2040; border-radius: 12px; padding: 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s; }
-    .lead-card:hover { border-color: #1a6bff; }
-    .lead-name { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-    .lead-val { font-size: 12px; color: #4ecca3; }
-    .lead-date { font-size: 11px; color: #4a6080; margin-top: 4px; }
-    .del-btn { float: left; background: none; border: none; color: #ff6584; cursor: pointer; font-size: 11px; }
-    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
-    .modal-bg.open { display: flex; }
-    .modal { background: #080f1a; border: 1px solid #0e2040; border-radius: 20px; padding: 32px; width: 400px; }
-    .modal h2 { margin-bottom: 24px; font-size: 18px; }
-    label { display: block; font-size: 13px; color: #6a85aa; margin-bottom: 6px; }
-    input, select { width: 100%; padding: 11px 14px; background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; color: #e0eaff; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; }
-    input:focus, select:focus { border-color: #1a6bff; }
-    .modal-btns { display: flex; gap: 10px; }
-    .btn-cancel { flex: 1; background: #0d1628; color: #6a85aa; border: 1px solid #0e2040; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
-    .new { color: #1a6bff; } .contact { color: #f6a623; } .proposal { color: #4ecca3; } .closed { color: #ff6584; }
+    :root{--bg:#060c14;--surface:#080f1a;--surface2:#0d1628;--blue:#1a6bff;--text:#e0eaff;--muted:#4a6080;--border:#0e2040;--green:#00d4aa;--red:#ff4d6d;--amber:#ffaa00}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;display:flex;min-height:100vh;font-size:14px}
+    .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:2px;position:fixed;top:0;bottom:0}
+    .logo{font-size:17px;font-weight:600;color:var(--blue);padding:8px 12px 20px}
+    .nav-section{font-size:10px;color:var(--muted);padding:12px 12px 6px;letter-spacing:1px;text-transform:uppercase}
+    .nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;display:flex;align-items:center;gap:9px}
+    .nav-item:hover{background:var(--surface2);color:var(--text)}
+    .nav-item.active{background:rgba(26,107,255,.15);color:var(--blue)}
+    .logout{margin-top:auto;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:9px}
+    .logout:hover{background:rgba(255,77,109,.1)}
+    .main{margin-left:220px;padding:28px;flex:1}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+    .topbar h1{font-size:20px;font-weight:600}
+    .btn{background:var(--blue);color:white;border:none;padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500}
+    .btn:hover{opacity:.88}
+    .pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .col{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;min-height:420px}
+    .col-header{font-size:12px;font-weight:500;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;text-transform:uppercase;letter-spacing:.5px}
+    .col-count{background:var(--surface2);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:20px}
+    .lead-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+    .lead-card:hover{border-color:var(--blue)}
+    .lead-name{font-size:13px;font-weight:500;margin-bottom:5px}
+    .lead-val{font-size:12px;color:var(--green)}
+    .lead-date{font-size:11px;color:var(--muted);margin-top:4px}
+    .del-btn{float:right;background:none;border:none;color:var(--red);cursor:pointer;font-size:11px}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;width:400px}
+    .modal h2{margin-bottom:22px;font-size:17px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    input,select{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:14px;outline:none}
+    input:focus,select:focus{border-color:var(--blue)}
+    .modal-btns{display:flex;gap:10px}
+    .btn-cancel{flex:1;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:10px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
+    .c-new{color:var(--blue)}.c-contact{color:var(--amber)}.c-proposal{color:var(--green)}.c-closed{color:var(--red)}
   </style>
 </head>
 <body>
   <nav class="sidebar">
     <div class="logo">◆ CRM NiChe</div>
-    <div class="nav-item" onclick="location.href='dashboard.html'">📊 Dashboard</div>
-    <div class="nav-item" onclick="location.href='clients.html'">👥 Clients</div>
-    <div class="nav-item active">🎯 Leads</div>
-    <div class="nav-item" onclick="location.href='tasks.html'">✅ Tasks</div>
-    <div class="logout" onclick="logout()">🚪 خروج</div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item" onclick="location.href='dashboard.html'"><span>▣</span> Dashboard</div>
+    <div class="nav-item" onclick="location.href='clients.html'"><span>👥</span> Clients</div>
+    <div class="nav-item active"><span>🎯</span> Leads</div>
+    <div class="nav-item" onclick="location.href='tasks.html'"><span>✅</span> Tasks</div>
+    <div class="logout" onclick="logout()"><span>⬡</span> Logout</div>
   </nav>
   <main class="main">
     <div class="topbar">
-      <h1>🎯 Leads Pipeline</h1>
-      <button class="btn" onclick="openModal()">+ إضافة Lead</button>
+      <h1>Leads Pipeline</h1>
+      <button class="btn" onclick="openModal()">+ Add Lead</button>
     </div>
     <div class="pipeline">
-      <div class="col">
-        <div class="col-header"><span class="new">🔵 جديد</span><span class="col-count" id="c0">0</span></div>
-        <div id="col-new"></div>
-      </div>
-      <div class="col">
-        <div class="col-header"><span class="contact">🟡 تواصل</span><span class="col-count" id="c1">0</span></div>
-        <div id="col-contact"></div>
-      </div>
-      <div class="col">
-        <div class="col-header"><span class="proposal">🟢 عرض</span><span class="col-count" id="c2">0</span></div>
-        <div id="col-proposal"></div>
-      </div>
-      <div class="col">
-        <div class="col-header"><span class="closed">🔴 مغلق</span><span class="col-count" id="c3">0</span></div>
-        <div id="col-closed"></div>
-      </div>
+      <div class="col"><div class="col-header"><span class="c-new">New</span><span class="col-count" id="c0">0</span></div><div id="col-new"></div></div>
+      <div class="col"><div class="col-header"><span class="c-contact">Contact</span><span class="col-count" id="c1">0</span></div><div id="col-contact"></div></div>
+      <div class="col"><div class="col-header"><span class="c-proposal">Proposal</span><span class="col-count" id="c2">0</span></div><div id="col-proposal"></div></div>
+      <div class="col"><div class="col-header"><span class="c-closed">Closed</span><span class="col-count" id="c3">0</span></div><div id="col-closed"></div></div>
     </div>
   </main>
   <div class="modal-bg" id="modal">
     <div class="modal">
-      <h2>إضافة Lead جديد</h2>
-      <label>الاسم</label>
-      <input type="text" id="f-name" placeholder="اسم العميل المحتمل">
-      <label>القيمة المتوقعة</label>
-      <input type="text" id="f-val" placeholder="5000 درهم">
-      <label>المرحلة</label>
-      <select id="f-stage">
-        <option value="new">جديد</option>
-        <option value="contact">تواصل</option>
-        <option value="proposal">عرض</option>
-        <option value="closed">مغلق</option>
-      </select>
+      <h2>Add New Lead</h2>
+      <label>Name</label>
+      <input type="text" id="f-name" placeholder="Prospect name">
+      <label>Expected Value</label>
+      <input type="text" id="f-val" placeholder="e.g. $5,000">
+      <label>Stage</label>
+      <select id="f-stage"><option value="new">New</option><option value="contact">Contact</option><option value="proposal">Proposal</option><option value="closed">Closed</option></select>
       <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
-        <button class="btn" style="flex:2" onclick="addLead()">حفظ</button>
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn" style="flex:2" onclick="add()">Save</button>
       </div>
     </div>
   </div>
   <script>
-    if (!localStorage.getItem('crm_user')) window.location.href = '../index.html';
-    const cols = { new: 'col-new', contact: 'col-contact', proposal: 'col-proposal', closed: 'col-closed' };
-    const counts = { new: 'c0', contact: 'c1', proposal: 'c2', closed: 'c3' };
-    function getLeads() { return JSON.parse(localStorage.getItem('crm_leads') || '[]'); }
-    function saveLeads(d) { localStorage.setItem('crm_leads', JSON.stringify(d)); }
-    function render() {
-      const leads = getLeads();
-      Object.keys(cols).forEach(stage => {
-        const items = leads.filter(l => l.stage === stage);
-        document.getElementById(counts[stage]).textContent = items.length;
-        document.getElementById(cols[stage]).innerHTML = items.length
-          ? items.map((l,i) => '<div class="lead-card"><button class="del-btn" onclick="del(' + leads.indexOf(l) + ')">✕</button><div class="lead-name">' + l.name + '</div><div class="lead-val">' + (l.val||'') + '</div><div class="lead-date">' + (l.date||'') + '</div></div>').join('')
-          : '<p style="color:#4a6080;font-size:13px;text-align:center;padding:20px 0">لا يوجد</p>';
+    if(!localStorage.getItem('crm_user'))window.location.href='../index.html';
+    const cols={new:'col-new',contact:'col-contact',proposal:'col-proposal',closed:'col-closed'};
+    const cnts={new:'c0',contact:'c1',proposal:'c2',closed:'c3'};
+    function get(){return JSON.parse(localStorage.getItem('crm_leads')||'[]')}
+    function save(d){localStorage.setItem('crm_leads',JSON.stringify(d))}
+    function render(){
+      const leads=get();
+      Object.keys(cols).forEach(stage=>{
+        const items=leads.filter(l=>l.stage===stage);
+        document.getElementById(cnts[stage]).textContent=items.length;
+        document.getElementById(cols[stage]).innerHTML=items.length?items.map((l)=>'<div class="lead-card"><button class="del-btn" onclick="del('+leads.indexOf(l)+')">✕</button><div class="lead-name">'+l.name+'</div><div class="lead-val">'+(l.val||'')+'</div><div class="lead-date">'+(l.date||'')+'</div></div>').join(''):'<p style="color:var(--muted);font-size:12px;text-align:center;padding:20px 0">Empty</p>';
       });
     }
-    function openModal() { document.getElementById('modal').classList.add('open'); }
-    function closeModal() { document.getElementById('modal').classList.remove('open'); }
-    function addLead() {
-      const name = document.getElementById('f-name').value.trim();
-      if (!name) return;
-      const leads = getLeads();
-      leads.push({ name, val: document.getElementById('f-val').value.trim(), stage: document.getElementById('f-stage').value, date: new Date().toLocaleDateString('ar-MA') });
-      saveLeads(leads); closeModal(); render();
-      document.getElementById('f-name').value = ''; document.getElementById('f-val').value = '';
+    function openModal(){document.getElementById('modal').classList.add('open')}
+    function closeModal(){document.getElementById('modal').classList.remove('open')}
+    function add(){
+      const name=document.getElementById('f-name').value.trim();
+      if(!name)return;
+      const d=get();
+      d.push({name,val:document.getElementById('f-val').value.trim(),stage:document.getElementById('f-stage').value,date:new Date().toLocaleDateString('en-GB')});
+      save(d);closeModal();render();
+      document.getElementById('f-name').value='';document.getElementById('f-val').value='';
     }
-    function del(i) { const d = getLeads(); d.splice(i,1); saveLeads(d); render(); }
-    function logout() { localStorage.removeItem('crm_user'); window.location.href = '../index.html'; }
+    function del(i){const d=get();d.splice(i,1);save(d);render()}
+    function logout(){localStorage.removeItem('crm_user');window.location.href='../index.html'}
     render();
   </script>
 </body>

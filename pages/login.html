@@ -1,45 +1,45 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دخول — CRM</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Login — CRM NiChe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(#0e2040 1px, transparent 1px), linear-gradient(90deg, #0e2040 1px, transparent 1px); background-size: 40px 40px; opacity: 0.2; pointer-events: none; }
-    .card { background: #080f1a; border: 1px solid #0e2040; border-radius: 20px; padding: 48px 40px; width: 360px; position: relative; z-index: 1; }
-    .logo { width: 56px; height: 56px; border: 2px solid #1a6bff; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #1a6bff; margin: 0 auto 24px; box-shadow: 0 0 30px rgba(26,107,255,0.3); }
-    h1 { text-align: center; font-size: 22px; font-weight: 600; margin-bottom: 6px; }
-    .sub { text-align: center; color: #4a6080; font-size: 13px; margin-bottom: 36px; }
-    label { display: block; font-size: 13px; color: #6a85aa; margin-bottom: 6px; }
-    input { width: 100%; padding: 12px 16px; background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; color: #e0eaff; font-size: 14px; font-family: inherit; margin-bottom: 20px; outline: none; transition: border-color 0.2s; }
-    input:focus { border-color: #1a6bff; }
-    button { width: 100%; padding: 13px; background: #1a6bff; color: white; border: none; border-radius: 10px; font-size: 15px; font-family: inherit; font-weight: 500; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
-    button:hover { opacity: 0.9; transform: translateY(-1px); }
-    .error { color: #ff6584; font-size: 13px; text-align: center; margin-top: 14px; display: none; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#060c14;color:#e0eaff;font-family:'Inter',sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(#0e2040 1px,transparent 1px),linear-gradient(90deg,#0e2040 1px,transparent 1px);background-size:40px 40px;opacity:.3;pointer-events:none}
+    .card{background:#080f1a;border:1px solid #0e2040;border-radius:20px;padding:48px 40px;width:380px;position:relative;z-index:1}
+    .logo{width:52px;height:52px;border:2px solid #1a6bff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#1a6bff;margin:0 auto 24px;box-shadow:0 0 30px rgba(26,107,255,0.25)}
+    h1{text-align:center;font-size:20px;font-weight:600;margin-bottom:4px}
+    .sub{text-align:center;color:#4a6080;font-size:13px;margin-bottom:32px}
+    label{display:block;font-size:12px;color:#4a6080;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+    input{width:100%;padding:11px 14px;background:#0d1628;border:1px solid #0e2040;border-radius:10px;color:#e0eaff;font-size:14px;font-family:inherit;margin-bottom:18px;outline:none;transition:border-color .2s}
+    input:focus{border-color:#1a6bff}
+    button{width:100%;padding:12px;background:#1a6bff;color:white;border:none;border-radius:10px;font-size:14px;font-family:inherit;font-weight:500;cursor:pointer;transition:opacity .2s}
+    button:hover{opacity:.88}
+    .error{color:#ff4d6d;font-size:12px;text-align:center;margin-top:12px;display:none}
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo">◆</div>
     <h1>CRM NiChe</h1>
-    <p class="sub">سجل دخولك للمتابعة</p>
-    <label>الاسم</label>
-    <input type="text" id="username" placeholder="أدخل اسمك">
-    <label>كلمة المرور</label>
+    <p class="sub">Sign in to your account</p>
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Enter your name">
+    <label>Password</label>
     <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
-    <button onclick="login()">دخول ←</button>
-    <p class="error" id="err">⚠️ أدخل الاسم وكلمة المرور</p>
+    <button onclick="login()">Sign In →</button>
+    <p class="error" id="err">⚠ Please enter username and password</p>
   </div>
   <script>
-    function login() {
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value.trim();
-      if (!u || !p) { document.getElementById('err').style.display = 'block'; return; }
-      localStorage.setItem('crm_user', u);
-      window.location.href = 'dashboard.html';
+    function login(){
+      const u=document.getElementById('username').value.trim();
+      const p=document.getElementById('password').value.trim();
+      if(!u||!p){document.getElementById('err').style.display='block';return}
+      localStorage.setItem('crm_user',u);
+      window.location.href='dashboard.html';
     }
   </script>
 </body>

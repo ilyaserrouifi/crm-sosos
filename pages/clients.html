@@ -1,113 +1,111 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>العملاء — CRM</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Clients — CRM NiChe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; }
-    .nav-item:hover { background: #0d1628; color: #e0eaff; }
-    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
-    .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; }
-    .logout:hover { background: #2a1a1a; }
-    .main { margin-right: 220px; padding: 32px; flex: 1; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .topbar h1 { font-size: 22px; font-weight: 600; }
-    .btn { background: #1a6bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; transition: opacity 0.2s; }
-    .btn:hover { opacity: 0.85; }
-    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
-    .modal-bg.open { display: flex; }
-    .modal { background: #080f1a; border: 1px solid #0e2040; border-radius: 20px; padding: 32px; width: 400px; }
-    .modal h2 { margin-bottom: 24px; font-size: 18px; }
-    label { display: block; font-size: 13px; color: #6a85aa; margin-bottom: 6px; }
-    input, select { width: 100%; padding: 11px 14px; background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; color: #e0eaff; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; }
-    input:focus, select:focus { border-color: #1a6bff; }
-    .modal-btns { display: flex; gap: 10px; margin-top: 8px; }
-    .btn-cancel { flex: 1; background: #0d1628; color: #6a85aa; border: 1px solid #0e2040; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
-    .section { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
-    .search { background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; padding: 10px 16px; color: #e0eaff; font-size: 14px; font-family: inherit; width: 260px; outline: none; margin-bottom: 20px; }
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: right; font-size: 12px; color: #4a6080; padding: 0 0 12px; font-weight: 400; }
-    td { padding: 13px 0; font-size: 14px; border-top: 1px solid #0d1628; }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
-    .badge.active { background: #0d2a20; color: #4ecca3; }
-    .badge.inactive { background: #2a2a1a; color: #f6a623; }
-    .del-btn { background: none; border: none; color: #ff6584; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 6px; }
-    .del-btn:hover { background: #2a1a1a; }
-    .empty { text-align: center; color: #4a6080; padding: 40px 0; }
+    :root{--bg:#060c14;--surface:#080f1a;--surface2:#0d1628;--blue:#1a6bff;--text:#e0eaff;--muted:#4a6080;--border:#0e2040;--green:#00d4aa;--red:#ff4d6d;--amber:#ffaa00}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;display:flex;min-height:100vh;font-size:14px}
+    .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:2px;position:fixed;top:0;bottom:0}
+    .logo{font-size:17px;font-weight:600;color:var(--blue);padding:8px 12px 20px}
+    .nav-section{font-size:10px;color:var(--muted);padding:12px 12px 6px;letter-spacing:1px;text-transform:uppercase}
+    .nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;display:flex;align-items:center;gap:9px}
+    .nav-item:hover{background:var(--surface2);color:var(--text)}
+    .nav-item.active{background:rgba(26,107,255,.15);color:var(--blue)}
+    .logout{margin-top:auto;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:9px}
+    .logout:hover{background:rgba(255,77,109,.1)}
+    .main{margin-left:220px;padding:28px;flex:1}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+    .topbar h1{font-size:20px;font-weight:600}
+    .btn{background:var(--blue);color:white;border:none;padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500}
+    .btn:hover{opacity:.88}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px}
+    .search{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:9px 14px;color:var(--text);font-size:13px;font-family:inherit;width:260px;outline:none;margin-bottom:18px}
+    .search:focus{border-color:var(--blue)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-size:11px;color:var(--muted);padding:0 0 10px;font-weight:400;text-transform:uppercase;letter-spacing:.5px}
+    td{padding:11px 0;font-size:13px;border-top:1px solid var(--border)}
+    .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px}
+    .badge.active{background:rgba(0,212,170,.1);color:var(--green)}
+    .badge.inactive{background:rgba(255,170,0,.1);color:var(--amber)}
+    .del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:6px}
+    .del-btn:hover{background:rgba(255,77,109,.1)}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;width:400px}
+    .modal h2{margin-bottom:22px;font-size:17px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    input,select{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:14px;outline:none}
+    input:focus,select:focus{border-color:var(--blue)}
+    .modal-btns{display:flex;gap:10px;margin-top:6px}
+    .btn-cancel{flex:1;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:10px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
+    .empty{text-align:center;color:var(--muted);padding:36px 0}
   </style>
 </head>
 <body>
   <nav class="sidebar">
     <div class="logo">◆ CRM NiChe</div>
-    <div class="nav-item" onclick="location.href='dashboard.html'">📊 Dashboard</div>
-    <div class="nav-item active">👥 Clients</div>
-    <div class="nav-item" onclick="location.href='leads.html'">🎯 Leads</div>
-    <div class="nav-item" onclick="location.href='tasks.html'">✅ Tasks</div>
-    <div class="logout" onclick="logout()">🚪 خروج</div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item" onclick="location.href='dashboard.html'"><span>▣</span> Dashboard</div>
+    <div class="nav-item active"><span>👥</span> Clients</div>
+    <div class="nav-item" onclick="location.href='leads.html'"><span>🎯</span> Leads</div>
+    <div class="nav-item" onclick="location.href='tasks.html'"><span>✅</span> Tasks</div>
+    <div class="logout" onclick="logout()"><span>⬡</span> Logout</div>
   </nav>
   <main class="main">
     <div class="topbar">
-      <h1>👥 العملاء</h1>
-      <button class="btn" onclick="openModal()">+ إضافة عميل</button>
+      <h1>Clients</h1>
+      <button class="btn" onclick="openModal()">+ Add Client</button>
     </div>
     <div class="section">
-      <input class="search" type="text" placeholder="🔍 ابحث عن عميل..." oninput="renderTable(this.value)">
+      <input class="search" type="text" placeholder="Search clients..." oninput="render(this.value)">
       <table>
-        <thead><tr><th>الاسم</th><th>الهاتف</th><th>الحالة</th><th>التاريخ</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Phone</th><th>Status</th><th>Date</th><th></th></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
   </main>
   <div class="modal-bg" id="modal">
     <div class="modal">
-      <h2>إضافة عميل جديد</h2>
-      <label>الاسم الكامل</label>
-      <input type="text" id="f-name" placeholder="محمد العمراني">
-      <label>رقم الهاتف</label>
-      <input type="text" id="f-phone" placeholder="06xxxxxxxx">
-      <label>الحالة</label>
-      <select id="f-status">
-        <option value="active">نشط</option>
-        <option value="inactive">غير نشط</option>
-      </select>
+      <h2>Add New Client</h2>
+      <label>Full Name</label>
+      <input type="text" id="f-name" placeholder="John Doe">
+      <label>Phone Number</label>
+      <input type="text" id="f-phone" placeholder="+212 6xx xxx xxx">
+      <label>Status</label>
+      <select id="f-status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
       <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
-        <button class="btn" style="flex:2" onclick="addClient()">حفظ</button>
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn" style="flex:2" onclick="add()">Save</button>
       </div>
     </div>
   </div>
   <script>
-    if (!localStorage.getItem('crm_user')) window.location.href = '../index.html';
-    function getClients() { return JSON.parse(localStorage.getItem('crm_clients') || '[]'); }
-    function saveClients(d) { localStorage.setItem('crm_clients', JSON.stringify(d)); }
-    function renderTable(q) {
-      const data = getClients().filter(c => !q || c.name.includes(q) || (c.phone||'').includes(q));
-      const tbody = document.getElementById('tbody');
-      if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">لا يوجد عملاء</td></tr>'; return; }
-      tbody.innerHTML = data.map((c,i) => '<tr><td>' + c.name + '</td><td>' + (c.phone||'—') + '</td><td><span class="badge ' + c.status + '">' + (c.status==='active'?'نشط':'غير نشط') + '</span></td><td>' + (c.date||'—') + '</td><td><button class="del-btn" onclick="delClient(' + i + ')">حذف</button></td></tr>').join('');
+    if(!localStorage.getItem('crm_user'))window.location.href='../index.html';
+    function get(){return JSON.parse(localStorage.getItem('crm_clients')||'[]')}
+    function save(d){localStorage.setItem('crm_clients',JSON.stringify(d))}
+    function render(q){
+      const data=get().filter(c=>!q||c.name.toLowerCase().includes(q.toLowerCase())||(c.phone||'').includes(q));
+      const tb=document.getElementById('tbody');
+      if(!data.length){tb.innerHTML='<tr><td colspan="5" class="empty">No clients yet</td></tr>';return}
+      tb.innerHTML=data.map((c,i)=>'<tr><td>'+c.name+'</td><td>'+(c.phone||'—')+'</td><td><span class="badge '+c.status+'">'+(c.status==='active'?'Active':'Inactive')+'</span></td><td>'+(c.date||'—')+'</td><td><button class="del-btn" onclick="del('+i+')">Remove</button></td></tr>').join('');
     }
-    function openModal() { document.getElementById('modal').classList.add('open'); }
-    function closeModal() { document.getElementById('modal').classList.remove('open'); }
-    function addClient() {
-      const name = document.getElementById('f-name').value.trim();
-      if (!name) return;
-      const clients = getClients();
-      clients.push({ name, phone: document.getElementById('f-phone').value.trim(), status: document.getElementById('f-status').value, date: new Date().toLocaleDateString('ar-MA') });
-      saveClients(clients);
-      closeModal();
-      renderTable();
-      document.getElementById('f-name').value = '';
-      document.getElementById('f-phone').value = '';
+    function openModal(){document.getElementById('modal').classList.add('open')}
+    function closeModal(){document.getElementById('modal').classList.remove('open')}
+    function add(){
+      const name=document.getElementById('f-name').value.trim();
+      if(!name)return;
+      const d=get();
+      d.push({name,phone:document.getElementById('f-phone').value.trim(),status:document.getElementById('f-status').value,date:new Date().toLocaleDateString('en-GB')});
+      save(d);closeModal();render();
+      document.getElementById('f-name').value='';document.getElementById('f-phone').value='';
     }
-    function delClient(i) { const d = getClients(); d.splice(i,1); saveClients(d); renderTable(); }
-    function logout() { localStorage.removeItem('crm_user'); window.location.href = '../index.html'; }
-    renderTable();
+    function del(i){const d=get();d.splice(i,1);save(d);render()}
+    function logout(){localStorage.removeItem('crm_user');window.location.href='../index.html'}
+    render();
   </script>
 </body>
 </html>

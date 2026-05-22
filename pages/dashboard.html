@@ -7,32 +7,32 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; color: #e8e8f0; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #12121a; border-left: 1px solid #2a2a3a; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #6c63ff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #9898aa; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
-    .nav-item:hover { background: #1a1a26; color: #e8e8f0; }
-    .nav-item.active { background: #1e1b3a; color: #6c63ff; }
+    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
+    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
+    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+    .nav-item:hover { background: #0d1628; color: #e0eaff; }
+    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
     .main { margin-right: 220px; padding: 32px; flex: 1; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
     .topbar h1 { font-size: 22px; font-weight: 600; }
-    .user-badge { background: #1a1a26; border: 1px solid #2a2a3a; padding: 8px 16px; border-radius: 10px; font-size: 13px; color: #9898aa; cursor: pointer; }
+    .user-badge { background: #0d1628; border: 1px solid #0e2040; padding: 8px 16px; border-radius: 10px; font-size: 13px; color: #6a85aa; cursor: pointer; }
     .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
-    .card { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; }
-    .card .label { font-size: 12px; color: #6b6b80; margin-bottom: 8px; }
+    .card { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
+    .card .label { font-size: 12px; color: #4a6080; margin-bottom: 8px; }
     .card .value { font-size: 28px; font-weight: 600; }
     .card .change { font-size: 12px; color: #4ecca3; margin-top: 6px; }
-    .card.purple .value { color: #6c63ff; }
+    .card.purple .value { color: #1a6bff; }
     .card.green .value { color: #4ecca3; }
     .card.pink .value { color: #ff6584; }
     .card.amber .value { color: #f6a623; }
-    .section { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; }
-    .section h2 { font-size: 15px; font-weight: 500; margin-bottom: 20px; color: #9898aa; }
+    .section { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
+    .section h2 { font-size: 15px; font-weight: 500; margin-bottom: 20px; color: #6a85aa; }
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: right; font-size: 12px; color: #6b6b80; padding: 0 0 12px; font-weight: 400; }
-    td { padding: 12px 0; font-size: 14px; border-top: 1px solid #1a1a26; }
+    th { text-align: right; font-size: 12px; color: #4a6080; padding: 0 0 12px; font-weight: 400; }
+    td { padding: 12px 0; font-size: 14px; border-top: 1px solid #0d1628; }
     .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
-    .badge.new { background: #1e1b3a; color: #6c63ff; }
+    .badge.new { background: #0d1f3c; color: #1a6bff; }
     .badge.active { background: #0d2a20; color: #4ecca3; }
     .badge.done { background: #2a1a1a; color: #ff6584; }
     .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; transition: all 0.2s; }
@@ -63,7 +63,7 @@
       <h2>آخر العملاء المضافين</h2>
       <table>
         <thead><tr><th>الاسم</th><th>الحالة</th><th>تاريخ الإضافة</th></tr></thead>
-        <tbody id="clients-table"><tr><td colspan="3" style="color:#6b6b80;text-align:center;padding:20px">لا يوجد عملاء بعد</td></tr></tbody>
+        <tbody id="clients-table"><tr><td colspan="3" style="color:#4a6080;text-align:center;padding:20px">لا يوجد عملاء بعد</td></tr></tbody>
       </table>
     </div>
   </main>

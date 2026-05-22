@@ -7,44 +7,44 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; color: #e8e8f0; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #12121a; border-left: 1px solid #2a2a3a; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #6c63ff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #9898aa; transition: all 0.2s; }
-    .nav-item:hover { background: #1a1a26; color: #e8e8f0; }
-    .nav-item.active { background: #1e1b3a; color: #6c63ff; }
+    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
+    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
+    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; }
+    .nav-item:hover { background: #0d1628; color: #e0eaff; }
+    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
     .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; }
     .logout:hover { background: #2a1a1a; }
     .main { margin-right: 220px; padding: 32px; flex: 1; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
     .topbar h1 { font-size: 22px; font-weight: 600; }
-    .btn { background: #6c63ff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
+    .btn { background: #1a6bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
     .btn:hover { opacity: 0.85; }
     .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .col { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 20px; }
-    .col-title { font-size: 14px; font-weight: 500; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #2a2a3a; }
-    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a26; }
+    .col { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 20px; }
+    .col-title { font-size: 14px; font-weight: 500; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #0e2040; }
+    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #0d1628; }
     .task-item:last-child { border-bottom: none; }
-    .checkbox { width: 18px; height: 18px; border: 2px solid #2a2a3a; border-radius: 5px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; transition: all 0.2s; }
+    .checkbox { width: 18px; height: 18px; border: 2px solid #0e2040; border-radius: 5px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; transition: all 0.2s; }
     .checkbox.done { background: #4ecca3; border-color: #4ecca3; }
     .task-text { flex: 1; font-size: 14px; line-height: 1.5; }
-    .task-text.done { text-decoration: line-through; color: #6b6b80; }
-    .task-date { font-size: 11px; color: #6b6b80; margin-top: 3px; }
+    .task-text.done { text-decoration: line-through; color: #4a6080; }
+    .task-date { font-size: 11px; color: #4a6080; margin-top: 3px; }
     .del-btn { background: none; border: none; color: #ff6584; cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 6px; }
-    .empty { text-align: center; color: #6b6b80; padding: 30px 0; font-size: 13px; }
+    .empty { text-align: center; color: #4a6080; padding: 30px 0; font-size: 13px; }
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
     .modal-bg.open { display: flex; }
-    .modal { background: #12121a; border: 1px solid #2a2a3a; border-radius: 20px; padding: 32px; width: 400px; }
+    .modal { background: #080f1a; border: 1px solid #0e2040; border-radius: 20px; padding: 32px; width: 400px; }
     .modal h2 { margin-bottom: 24px; font-size: 18px; }
-    label { display: block; font-size: 13px; color: #9898aa; margin-bottom: 6px; }
-    input, textarea { width: 100%; padding: 11px 14px; background: #1a1a26; border: 1px solid #2a2a3a; border-radius: 10px; color: #e8e8f0; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; resize: none; }
-    input:focus, textarea:focus { border-color: #6c63ff; }
+    label { display: block; font-size: 13px; color: #6a85aa; margin-bottom: 6px; }
+    input, textarea { width: 100%; padding: 11px 14px; background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; color: #e0eaff; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; resize: none; }
+    input:focus, textarea:focus { border-color: #1a6bff; }
     .modal-btns { display: flex; gap: 10px; }
-    .btn-cancel { flex: 1; background: #1a1a26; color: #9898aa; border: 1px solid #2a2a3a; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
+    .btn-cancel { flex: 1; background: #0d1628; color: #6a85aa; border: 1px solid #0e2040; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
     .stats { display: flex; gap: 16px; margin-bottom: 24px; }
-    .stat { background: #12121a; border: 1px solid #2a2a3a; border-radius: 12px; padding: 16px 20px; flex: 1; text-align: center; }
+    .stat { background: #080f1a; border: 1px solid #0e2040; border-radius: 12px; padding: 16px 20px; flex: 1; text-align: center; }
     .stat .n { font-size: 24px; font-weight: 600; }
-    .stat .l { font-size: 12px; color: #6b6b80; margin-top: 4px; }
+    .stat .l { font-size: 12px; color: #4a6080; margin-top: 4px; }
   </style>
 </head>
 <body>

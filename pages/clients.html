@@ -7,39 +7,39 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0a0a0f; color: #e8e8f0; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #12121a; border-left: 1px solid #2a2a3a; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #6c63ff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #9898aa; transition: all 0.2s; }
-    .nav-item:hover { background: #1a1a26; color: #e8e8f0; }
-    .nav-item.active { background: #1e1b3a; color: #6c63ff; }
+    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
+    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
+    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; }
+    .nav-item:hover { background: #0d1628; color: #e0eaff; }
+    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
     .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; }
     .logout:hover { background: #2a1a1a; }
     .main { margin-right: 220px; padding: 32px; flex: 1; }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
     .topbar h1 { font-size: 22px; font-weight: 600; }
-    .btn { background: #6c63ff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; transition: opacity 0.2s; }
+    .btn { background: #1a6bff; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; transition: opacity 0.2s; }
     .btn:hover { opacity: 0.85; }
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
     .modal-bg.open { display: flex; }
-    .modal { background: #12121a; border: 1px solid #2a2a3a; border-radius: 20px; padding: 32px; width: 400px; }
+    .modal { background: #080f1a; border: 1px solid #0e2040; border-radius: 20px; padding: 32px; width: 400px; }
     .modal h2 { margin-bottom: 24px; font-size: 18px; }
-    label { display: block; font-size: 13px; color: #9898aa; margin-bottom: 6px; }
-    input, select { width: 100%; padding: 11px 14px; background: #1a1a26; border: 1px solid #2a2a3a; border-radius: 10px; color: #e8e8f0; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; }
-    input:focus, select:focus { border-color: #6c63ff; }
+    label { display: block; font-size: 13px; color: #6a85aa; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 11px 14px; background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; color: #e0eaff; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; }
+    input:focus, select:focus { border-color: #1a6bff; }
     .modal-btns { display: flex; gap: 10px; margin-top: 8px; }
-    .btn-cancel { flex: 1; background: #1a1a26; color: #9898aa; border: 1px solid #2a2a3a; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
-    .section { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; }
-    .search { background: #1a1a26; border: 1px solid #2a2a3a; border-radius: 10px; padding: 10px 16px; color: #e8e8f0; font-size: 14px; font-family: inherit; width: 260px; outline: none; margin-bottom: 20px; }
+    .btn-cancel { flex: 1; background: #0d1628; color: #6a85aa; border: 1px solid #0e2040; padding: 11px; border-radius: 10px; font-size: 14px; font-family: inherit; cursor: pointer; }
+    .section { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
+    .search { background: #0d1628; border: 1px solid #0e2040; border-radius: 10px; padding: 10px 16px; color: #e0eaff; font-size: 14px; font-family: inherit; width: 260px; outline: none; margin-bottom: 20px; }
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: right; font-size: 12px; color: #6b6b80; padding: 0 0 12px; font-weight: 400; }
-    td { padding: 13px 0; font-size: 14px; border-top: 1px solid #1a1a26; }
+    th { text-align: right; font-size: 12px; color: #4a6080; padding: 0 0 12px; font-weight: 400; }
+    td { padding: 13px 0; font-size: 14px; border-top: 1px solid #0d1628; }
     .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
     .badge.active { background: #0d2a20; color: #4ecca3; }
     .badge.inactive { background: #2a2a1a; color: #f6a623; }
     .del-btn { background: none; border: none; color: #ff6584; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 6px; }
     .del-btn:hover { background: #2a1a1a; }
-    .empty { text-align: center; color: #6b6b80; padding: 40px 0; }
+    .empty { text-align: center; color: #4a6080; padding: 40px 0; }
   </style>
 </head>
 <body>

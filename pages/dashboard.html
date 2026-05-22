@@ -1,89 +1,218 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — CRM</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Dashboard — CRM NiChe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
   <style>
+    :root {
+      --bg: #060c14; --surface: #080f1a; --surface2: #0d1628;
+      --blue: #1a6bff; --blue2: #0d4fbf; --blue-glow: rgba(26,107,255,0.2);
+      --text: #e0eaff; --muted: #4a6080; --border: #0e2040;
+      --green: #00d4aa; --red: #ff4d6d; --amber: #ffaa00;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #060c14; color: #e0eaff; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
-    .sidebar { width: 220px; background: #080f1a; border-left: 1px solid #0e2040; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 18px; font-weight: 600; color: #1a6bff; padding: 8px 12px 24px; }
-    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #6a85aa; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
-    .nav-item:hover { background: #0d1628; color: #e0eaff; }
-    .nav-item.active { background: #0d1f3c; color: #1a6bff; }
-    .main { margin-right: 220px; padding: 32px; flex: 1; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .topbar h1 { font-size: 22px; font-weight: 600; }
-    .user-badge { background: #0d1628; border: 1px solid #0e2040; padding: 8px 16px; border-radius: 10px; font-size: 13px; color: #6a85aa; cursor: pointer; }
-    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
-    .card { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
-    .card .label { font-size: 12px; color: #4a6080; margin-bottom: 8px; }
-    .card .value { font-size: 28px; font-weight: 600; }
-    .card .change { font-size: 12px; color: #4ecca3; margin-top: 6px; }
-    .card.purple .value { color: #1a6bff; }
-    .card.green .value { color: #4ecca3; }
-    .card.pink .value { color: #ff6584; }
-    .card.amber .value { color: #f6a623; }
-    .section { background: #080f1a; border: 1px solid #0e2040; border-radius: 16px; padding: 24px; }
-    .section h2 { font-size: 15px; font-weight: 500; margin-bottom: 20px; color: #6a85aa; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; min-height: 100vh; font-size: 14px; }
+    .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; gap: 2px; position: fixed; top: 0; bottom: 0; }
+    .logo { font-size: 17px; font-weight: 600; color: var(--blue); padding: 8px 12px 20px; letter-spacing: -0.3px; }
+    .nav-section { font-size: 10px; color: var(--muted); padding: 12px 12px 6px; letter-spacing: 1px; text-transform: uppercase; }
+    .nav-item { padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all 0.15s; display: flex; align-items: center; gap: 9px; }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: rgba(26,107,255,0.15); color: var(--blue); }
+    .nav-item .icon { width: 16px; text-align: center; }
+    .logout { margin-top: auto; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--red); display: flex; align-items: center; gap: 9px; }
+    .logout:hover { background: rgba(255,77,109,0.1); }
+    .main { margin-left: 220px; padding: 28px; flex: 1; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .topbar h1 { font-size: 20px; font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .user-pill { background: var(--surface2); border: 1px solid var(--border); padding: 7px 14px; border-radius: 20px; font-size: 13px; color: var(--muted); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; overflow: hidden; }
+    .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent, var(--blue)); }
+    .kpi.green { --accent: var(--green); }
+    .kpi.red { --accent: var(--red); }
+    .kpi.amber { --accent: var(--amber); }
+    .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .kpi-value { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+    .kpi-change { font-size: 11px; color: var(--green); }
+    .kpi-change.down { color: var(--red); }
+    .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .chart-box h3 { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .chart-tabs { display: flex; gap: 6px; }
+    .tab { font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; background: var(--surface2); color: var(--muted); border: none; font-family: inherit; transition: all 0.15s; }
+    .tab.active { background: var(--blue); color: white; }
+    .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .table-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .table-box h3 { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
+    .export-btn { font-size: 11px; color: var(--blue); background: rgba(26,107,255,0.1); border: 1px solid rgba(26,107,255,0.2); padding: 4px 10px; border-radius: 6px; cursor: pointer; }
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: right; font-size: 12px; color: #4a6080; padding: 0 0 12px; font-weight: 400; }
-    td { padding: 12px 0; font-size: 14px; border-top: 1px solid #0d1628; }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
-    .badge.new { background: #0d1f3c; color: #1a6bff; }
-    .badge.active { background: #0d2a20; color: #4ecca3; }
-    .badge.done { background: #2a1a1a; color: #ff6584; }
-    .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; transition: all 0.2s; }
-    .logout:hover { background: #2a1a1a; }
+    th { text-align: left; font-size: 11px; color: var(--muted); padding: 0 0 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 10px 0; font-size: 13px; border-top: 1px solid var(--border); }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; }
+    .badge.active { background: rgba(0,212,170,0.1); color: var(--green); }
+    .badge.pending { background: rgba(255,170,0,0.1); color: var(--amber); }
+    .badge.inprogress { background: rgba(26,107,255,0.1); color: var(--blue); }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 2px; width: 80px; }
+    .progress-fill { height: 100%; border-radius: 2px; background: var(--blue); }
   </style>
 </head>
 <body>
   <nav class="sidebar">
     <div class="logo">◆ CRM NiChe</div>
-    <div class="nav-item active">📊 Dashboard</div>
-    <div class="nav-item" onclick="location.href='clients.html'">👥 Clients</div>
-    <div class="nav-item" onclick="location.href='leads.html'">🎯 Leads</div>
-    <div class="nav-item" onclick="location.href='tasks.html'">✅ Tasks</div>
-    <div class="logout" onclick="logout()">🚪 خروج</div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item active"><span class="icon">▣</span> Dashboard</div>
+    <div class="nav-item" onclick="location.href='clients.html'"><span class="icon">👥</span> Clients</div>
+    <div class="nav-item" onclick="location.href='leads.html'"><span class="icon">🎯</span> Leads</div>
+    <div class="nav-item" onclick="location.href='tasks.html'"><span class="icon">✅</span> Tasks</div>
+    <div class="nav-section">Analytics</div>
+    <div class="nav-item"><span class="icon">📊</span> Reports</div>
+    <div class="nav-item"><span class="icon">⚡</span> Performance</div>
+    <div class="logout" onclick="logout()"><span class="icon">⬡</span> Logout</div>
   </nav>
   <main class="main">
     <div class="topbar">
-      <h1>مرحباً <span id="uname"></span> 👋</h1>
-      <div class="user-badge" id="ubadge"></div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Welcome back 👋</div>
+        <h1 id="uname">Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="user-pill" id="ubadge">User</div>
+      </div>
     </div>
-    <div class="cards">
-      <div class="card purple"><div class="label">إجمالي العملاء</div><div class="value" id="total-clients">0</div><div class="change">↑ جديد اليوم</div></div>
-      <div class="card green"><div class="label">Leads نشطة</div><div class="value" id="total-leads">0</div><div class="change">↑ هذا الأسبوع</div></div>
-      <div class="card amber"><div class="label">Tasks معلقة</div><div class="value" id="total-tasks">0</div><div class="change">→ للمتابعة</div></div>
-      <div class="card pink"><div class="label">مغلقة هذا الشهر</div><div class="value">0</div><div class="change">→ هدف الشهر</div></div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Total Clients</div>
+        <div class="kpi-value" id="k-clients">0</div>
+        <div class="kpi-change">↑ Added this week</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">Active Leads</div>
+        <div class="kpi-value" id="k-leads">0</div>
+        <div class="kpi-change">↑ This month</div>
+      </div>
+      <div class="kpi amber">
+        <div class="kpi-label">Pending Tasks</div>
+        <div class="kpi-value" id="k-tasks">0</div>
+        <div class="kpi-change">→ To follow up</div>
+      </div>
+      <div class="kpi red">
+        <div class="kpi-label">Closed Deals</div>
+        <div class="kpi-value">0</div>
+        <div class="kpi-change down">→ Monthly target</div>
+      </div>
     </div>
-    <div class="section">
-      <h2>آخر العملاء المضافين</h2>
-      <table>
-        <thead><tr><th>الاسم</th><th>الحالة</th><th>تاريخ الإضافة</th></tr></thead>
-        <tbody id="clients-table"><tr><td colspan="3" style="color:#4a6080;text-align:center;padding:20px">لا يوجد عملاء بعد</td></tr></tbody>
-      </table>
+
+    <div class="charts-row">
+      <div class="chart-box">
+        <h3>Projects Overview <div class="chart-tabs"><button class="tab active">Week</button><button class="tab">Month</button><button class="tab">Year</button></div></h3>
+        <canvas id="barChart" height="100"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Lead Status</h3>
+        <canvas id="donutChart" height="160"></canvas>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="table-box">
+        <h3>Active Projects <span class="export-btn">Export</span></h3>
+        <table>
+          <thead><tr><th>Project</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody id="proj-tbody">
+            <tr><td>CRM NiChe</td><td><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div></td><td><span class="badge inprogress">In Progress</span></td></tr>
+            <tr><td>Landing Page</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div></td><td><span class="badge pending">Pending</span></td></tr>
+            <tr><td>Mobile App</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--green)"></div></div></td><td><span class="badge active">Done</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-box">
+        <h3>Latest Clients <span class="export-btn">View All</span></h3>
+        <table>
+          <thead><tr><th>Name</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="clients-tbody"><tr><td colspan="3" style="color:var(--muted);text-align:center;padding:20px 0">No clients yet</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </main>
+
   <script>
     const user = localStorage.getItem('crm_user');
     if (!user) window.location.href = '../index.html';
-    document.getElementById('uname').textContent = user;
+    document.getElementById('uname').textContent = 'Welcome, ' + user;
     document.getElementById('ubadge').textContent = user;
+
     const clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
     const leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
     const tasks = JSON.parse(localStorage.getItem('crm_tasks') || '[]');
-    document.getElementById('total-clients').textContent = clients.length;
-    document.getElementById('total-leads').textContent = leads.length;
-    document.getElementById('total-tasks').textContent = tasks.length;
-    if (clients.length > 0) {
-      const tbody = document.getElementById('clients-table');
-      tbody.innerHTML = clients.slice(-5).reverse().map(c =>
-        '<tr><td>' + c.name + '</td><td><span class="badge active">نشط</span></td><td>' + (c.date || '—') + '</td></tr>'
+    document.getElementById('k-clients').textContent = clients.length;
+    document.getElementById('k-leads').textContent = leads.length;
+    document.getElementById('k-tasks').textContent = tasks.filter(t => !t.done).length;
+
+    if (clients.length) {
+      document.getElementById('clients-tbody').innerHTML = clients.slice(-4).reverse().map(c =>
+        '<tr><td>' + c.name + '</td><td><span class="badge active">Active</span></td><td>' + (c.date||'—') + '</td></tr>'
       ).join('');
     }
+
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Revenue',
+          data: [30,45,28,60,75,50,80,65,90,70,85,100],
+          backgroundColor: 'rgba(26,107,255,0.6)',
+          borderColor: '#1a6bff',
+          borderWidth: 1,
+          borderRadius: 4,
+        },{
+          label: 'Expenses',
+          data: [20,30,22,40,50,35,55,45,60,48,58,70],
+          backgroundColor: 'rgba(0,212,170,0.4)',
+          borderColor: '#00d4aa',
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#4a6080', font: { size: 11 } } } },
+        scales: {
+          x: { ticks: { color: '#4a6080', font: { size: 10 } }, grid: { color: '#0e2040' } },
+          y: { ticks: { color: '#4a6080', font: { size: 10 } }, grid: { color: '#0e2040' } }
+        }
+      }
+    });
+
+    const leads_data = { new: 0, contact: 0, proposal: 0, closed: 0 };
+    leads.forEach(l => { if (leads_data[l.stage] !== undefined) leads_data[l.stage]++; });
+    const donutCtx = document.getElementById('donutChart').getContext('2d');
+    new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['New','Contact','Proposal','Closed'],
+        datasets: [{ data: [leads_data.new||3, leads_data.contact||5, leads_data.proposal||4, leads_data.closed||2], backgroundColor: ['#1a6bff','#00d4aa','#ffaa00','#ff4d6d'], borderWidth: 0 }]
+      },
+      options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: { legend: { position: 'bottom', labels: { color: '#4a6080', font: { size: 11 }, padding: 12 } } }
+      }
+    });
+
+    document.querySelectorAll('.tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+
     function logout() { localStorage.removeItem('crm_user'); window.location.href = '../index.html'; }
   </script>
 </body>

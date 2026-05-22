@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0f; color: #e8e8f0; font-family: 'IBM Plex Sans Arabic', sans-serif; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: #12121a; border-left: 1px solid #2a2a3a; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; position: fixed; top: 0; bottom: 0; }
+    .logo { font-size: 18px; font-weight: 600; color: #6c63ff; padding: 8px 12px 24px; }
+    .nav-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #9898aa; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+    .nav-item:hover { background: #1a1a26; color: #e8e8f0; }
+    .nav-item.active { background: #1e1b3a; color: #6c63ff; }
+    .main { margin-right: 220px; padding: 32px; flex: 1; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .topbar h1 { font-size: 22px; font-weight: 600; }
+    .user-badge { background: #1a1a26; border: 1px solid #2a2a3a; padding: 8px 16px; border-radius: 10px; font-size: 13px; color: #9898aa; cursor: pointer; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .card { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; }
+    .card .label { font-size: 12px; color: #6b6b80; margin-bottom: 8px; }
+    .card .value { font-size: 28px; font-weight: 600; }
+    .card .change { font-size: 12px; color: #4ecca3; margin-top: 6px; }
+    .card.purple .value { color: #6c63ff; }
+    .card.green .value { color: #4ecca3; }
+    .card.pink .value { color: #ff6584; }
+    .card.amber .value { color: #f6a623; }
+    .section { background: #12121a; border: 1px solid #2a2a3a; border-radius: 16px; padding: 24px; }
+    .section h2 { font-size: 15px; font-weight: 500; margin-bottom: 20px; color: #9898aa; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: right; font-size: 12px; color: #6b6b80; padding: 0 0 12px; font-weight: 400; }
+    td { padding: 12px 0; font-size: 14px; border-top: 1px solid #1a1a26; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; }
+    .badge.new { background: #1e1b3a; color: #6c63ff; }
+    .badge.active { background: #0d2a20; color: #4ecca3; }
+    .badge.done { background: #2a1a1a; color: #ff6584; }
+    .logout { margin-top: auto; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; color: #ff6584; transition: all 0.2s; }
+    .logout:hover { background: #2a1a1a; }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="logo">◆ CRM NiChe</div>
+    <div class="nav-item active">📊 Dashboard</div>
+    <div class="nav-item" onclick="location.href='clients.html'">👥 Clients</div>
+    <div class="nav-item" onclick="location.href='leads.html'">🎯 Leads</div>
+    <div class="nav-item" onclick="location.href='tasks.html'">✅ Tasks</div>
+    <div class="logout" onclick="logout()">🚪 خروج</div>
+  </nav>
+  <main class="main">
+    <div class="topbar">
+      <h1>مرحباً <span id="uname"></span> 👋</h1>
+      <div class="user-badge" id="ubadge"></div>
+    </div>
+    <div class="cards">
+      <div class="card purple"><div class="label">إجمالي العملاء</div><div class="value" id="total-clients">0</div><div class="change">↑ جديد اليوم</div></div>
+      <div class="card green"><div class="label">Leads نشطة</div><div class="value" id="total-leads">0</div><div class="change">↑ هذا الأسبوع</div></div>
+      <div class="card amber"><div class="label">Tasks معلقة</div><div class="value" id="total-tasks">0</div><div class="change">→ للمتابعة</div></div>
+      <div class="card pink"><div class="label">مغلقة هذا الشهر</div><div class="value">0</div><div class="change">→ هدف الشهر</div></div>
+    </div>
+    <div class="section">
+      <h2>آخر العملاء المضافين</h2>
+      <table>
+        <thead><tr><th>الاسم</th><th>الحالة</th><th>تاريخ الإضافة</th></tr></thead>
+        <tbody id="clients-table"><tr><td colspan="3" style="color:#6b6b80;text-align:center;padding:20px">لا يوجد عملاء بعد</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const user = localStorage.getItem('crm_user');
+    if (!user) window.location.href = '../index.html';
+    document.getElementById('uname').textContent = user;
+    document.getElementById('ubadge').textContent = user;
+    const clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+    const leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
+    const tasks = JSON.parse(localStorage.getItem('crm_tasks') || '[]');
+    document.getElementById('total-clients').textContent = clients.length;
+    document.getElementById('total-leads').textContent = leads.length;
+    document.getElementById('total-tasks').textContent = tasks.length;
+    if (clients.length > 0) {
+      const tbody = document.getElementById('clients-table');
+      tbody.innerHTML = clients.slice(-5).reverse().map(c =>
+        '<tr><td>' + c.name + '</td><td><span class="badge active">نشط</span></td><td>' + (c.date || '—') + '</td></tr>'
+      ).join('');
+    }
+    function logout() { localStorage.removeItem('crm_user'); window.location.href = '../index.html'; }
+  </script>
+</body>
+</html>

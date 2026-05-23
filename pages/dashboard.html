@@ -118,6 +118,77 @@
       </div>
     </div>
 
+    
+    <!-- WORLD MAP ROW -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+      <div class="chart-box">
+        <h3>Active Users by Region</h3>
+        <div id="map-container" style="position:relative;background:#0d1628;border-radius:10px;padding:16px;min-height:200px">
+          <svg viewBox="0 0 800 400" style="width:100%;opacity:0.85" id="world-map">
+            <!-- Simplified world regions as blobs -->
+            <!-- North America -->
+            <ellipse cx="160" cy="160" rx="90" ry="60" fill="#0e2040" stroke="#1a6bff" stroke-width="1.5"/>
+            <text x="160" y="155" text-anchor="middle" fill="#6a85aa" font-size="11" font-family="Inter">North America</text>
+            <text x="160" y="170" text-anchor="middle" fill="#1a6bff" font-size="13" font-family="Inter" font-weight="600">35%</text>
+            <!-- Europe -->
+            <ellipse cx="390" cy="130" rx="65" ry="50" fill="#0e2040" stroke="#1a6bff" stroke-width="1.5"/>
+            <text x="390" y="125" text-anchor="middle" fill="#6a85aa" font-size="11" font-family="Inter">Europe</text>
+            <text x="390" y="142" text-anchor="middle" fill="#1a6bff" font-size="13" font-family="Inter" font-weight="600">28%</text>
+            <!-- Asia -->
+            <ellipse cx="580" cy="150" rx="100" ry="65" fill="#0e2040" stroke="#00d4aa" stroke-width="1.5"/>
+            <text x="580" y="145" text-anchor="middle" fill="#6a85aa" font-size="11" font-family="Inter">Asia</text>
+            <text x="580" y="162" text-anchor="middle" fill="#00d4aa" font-size="13" font-family="Inter" font-weight="600">22%</text>
+            <!-- Africa -->
+            <ellipse cx="390" cy="270" rx="60" ry="65" fill="#0e2040" stroke="#ffaa00" stroke-width="1.5"/>
+            <text x="390" y="265" text-anchor="middle" fill="#6a85aa" font-size="11" font-family="Inter">Africa</text>
+            <text x="390" y="282" text-anchor="middle" fill="#ffaa00" font-size="13" font-family="Inter" font-weight="600">8%</text>
+            <!-- South America -->
+            <ellipse cx="210" cy="290" rx="55" ry="65" fill="#0e2040" stroke="#ff4d6d" stroke-width="1.5"/>
+            <text x="210" y="285" text-anchor="middle" fill="#6a85aa" font-size="11" font-family="Inter">S. America</text>
+            <text x="210" y="302" text-anchor="middle" fill="#ff4d6d" font-size="13" font-family="Inter" font-weight="600">7%</text>
+            <!-- Connections/lines -->
+            <line x1="250" y1="160" x2="325" y2="140" stroke="#1a6bff" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.4"/>
+            <line x1="455" y1="135" x2="480" y2="145" stroke="#1a6bff" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.4"/>
+            <line x1="390" y1="180" x2="390" y2="205" stroke="#ffaa00" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="chart-box">
+        <h3>Top Regions</h3>
+        <div id="regions-list" style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇺🇸 United States</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:55%;height:100%;background:#1a6bff;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#1a6bff;width:35px;text-align:right">55%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇬🇧 UK</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:40%;height:100%;background:#1a6bff;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#1a6bff;width:35px;text-align:right">40%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇮🇳 India</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:30%;height:100%;background:#00d4aa;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#00d4aa;width:35px;text-align:right">30%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇨🇦 Canada</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:25%;height:100%;background:#1a6bff;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#1a6bff;width:35px;text-align:right">25%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇦🇺 Australia</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:20%;height:100%;background:#ffaa00;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#ffaa00;width:35px;text-align:right">20%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="font-size:13px;color:#e0eaff;width:130px">🇵🇰 Pakistan</span>
+            <div style="flex:1;height:6px;background:#0e2040;border-radius:3px"><div style="width:15%;height:100%;background:#ff4d6d;border-radius:3px"></div></div>
+            <span style="font-size:12px;color:#ff4d6d;width:35px;text-align:right">15%</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="bottom-row">
       <div class="table-box">
         <h3>Active Projects <span class="export-btn">Export</span></h3>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outreachers — Niche CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#060c14;--surface:#080f1a;--surface2:#0d1628;--blue:#1a6bff;--text:#e0eaff;--muted:#4a6080;--border:#0e2040;--green:#00d4aa;--red:#ff4d6d;--amber:#ffaa00}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;display:flex;min-height:100vh;font-size:14px}
+    .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:2px;position:fixed;top:0;bottom:0;overflow-y:auto}
+    .nav-section{font-size:10px;color:var(--muted);padding:12px 12px 6px;letter-spacing:1px;text-transform:uppercase}
+    .nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;display:flex;align-items:center;gap:9px}
+    .nav-item:hover{background:var(--surface2);color:var(--text)}
+    .nav-item.active{background:rgba(26,107,255,.15);color:var(--blue)}
+    .logout{margin-top:auto;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:9px}
+    .logout:hover{background:rgba(255,77,109,.1)}
+    .main{margin-left:220px;padding:28px;flex:1}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+    .topbar h1{font-size:20px;font-weight:600}
+    .btn{background:var(--blue);color:white;border:none;padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500}
+    .btn:hover{opacity:.88}
+    .btn-ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden}
+    .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--blue))}
+    .kpi.green{--accent:var(--green)}.kpi.red{--accent:var(--red)}.kpi.amber{--accent:var(--amber)}
+    .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+    .kpi-value{font-size:26px;font-weight:600;margin-bottom:4px}
+    .kpi-change{font-size:11px;color:var(--green)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-size:11px;color:var(--muted);padding:0 0 10px;font-weight:400;text-transform:uppercase;letter-spacing:.5px}
+    td{padding:12px 0;font-size:13px;border-top:1px solid var(--border)}
+    .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px}
+    .badge.active{background:rgba(0,212,170,.1);color:var(--green)}
+    .badge.pending{background:rgba(255,170,0,.1);color:var(--amber)}
+    .badge.inactive{background:rgba(255,77,109,.1);color:var(--red)}
+    .badge.blue{background:rgba(26,107,255,.1);color:var(--blue)}
+    .score-bar{height:5px;background:var(--border);border-radius:3px;width:80px;display:inline-block;vertical-align:middle}
+    .score-fill{height:100%;border-radius:3px;background:var(--blue)}
+    .avatar{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin-left:8px}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;width:420px}
+    .modal h2{margin-bottom:22px;font-size:17px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    input,select,textarea{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:14px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+    .modal-btns{display:flex;gap:10px}
+    .btn-cancel{flex:1;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:10px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
+    .tab-bar{display:flex;gap:8px;margin-bottom:20px}
+    .tab-btn{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);font-family:inherit;transition:all .15s}
+    .tab-btn.active{background:rgba(26,107,255,.15);color:var(--blue);border-color:rgba(26,107,255,.3)}
+    .del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:6px}
+    .del-btn:hover{background:rgba(255,77,109,.1)}
+  </style>
+</head>
+<body>
+    <nav class="sidebar">
+    <div class="logo" onclick="location.href='dashboard.html'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 12px 24px">
+      <svg width="28" height="28" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="55" rx="22" ry="28" fill="none" stroke="#e0eaff" stroke-width="8"/><path d="M35 75 L50 28 L65 75" fill="none" stroke="#e0eaff" stroke-width="8" stroke-linecap="round"/><path d="M38 58 L62 58" fill="none" stroke="#e0eaff" stroke-width="6" stroke-linecap="round"/><circle cx="68" cy="18" r="7" fill="#1a6bff"/><line x1="74" y1="30" x2="74" y2="75" stroke="#e0eaff" stroke-width="3"/><text x="78" y="65" font-family="Georgia,serif" font-size="18" fill="#e0eaff" font-style="italic">che</text></svg>
+      <span style="font-size:16px;font-weight:600;color:#e0eaff">Niche</span>
+    </div>
+    <div class="nav-section">Main</div>
+    <div class="nav-item" onclick="location.href='dashboard.html'"><span>📊</span> Dashboard</div>
+    <div class="nav-section">People</div>
+    <div class="nav-item " onclick="location.href='cold-callers.html'"><span>📞</span> Cold Callers</div>
+    <div class="nav-item active" onclick="location.href='outreachers.html'"><span>✉️</span> Outreachers</div>
+    <div class="nav-item " onclick="location.href='freelancers.html'"><span>💼</span> Freelancers</div>
+    <div class="nav-section">Pipeline</div>
+    <div class="nav-item" onclick="location.href='pipeline.html'"><span>🎯</span> Sales Pipeline</div>
+    <div class="nav-item" onclick="location.href='kanban.html'"><span>📋</span> Kanban</div>
+    <div class="nav-section">Management</div>
+    <div class="nav-item" onclick="location.href='clients.html'"><span>👥</span> Clients</div>
+    <div class="nav-item" onclick="location.href='tasks.html'"><span>✅</span> Tasks</div>
+    <div class="nav-item" onclick="location.href='projects.html'"><span>📁</span> Projects</div>
+    <div class="nav-section">Finance</div>
+    <div class="nav-item" onclick="location.href='finance.html'"><span>💰</span> Revenue</div>
+    <div class="nav-section">Analytics</div>
+    <div class="nav-item" onclick="location.href='analytics.html'"><span>📈</span> Reports</div>
+    <div class="logout" onclick="logout()"><span>⬡</span> Logout</div>
+  </nav>
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">People Management</div>
+        <h1>✉️ Cold Outreachers</h1>
+      </div>
+      <button class="btn" onclick="openModal()">+ Add Outreacher</button>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Total Outreachers</div><div class="kpi-value" id="k-total">0</div><div class="kpi-change">↑ Active</div></div>
+      <div class="kpi green"><div class="kpi-label">Emails Sent Today</div><div class="kpi-value" id="k-emails">0</div><div class="kpi-change">↑ This week</div></div>
+      <div class="kpi amber"><div class="kpi-label">Response Rate</div><div class="kpi-value" id="k-resp">0%</div><div class="kpi-change">→ avg</div></div>
+      <div class="kpi red"><div class="kpi-label">LinkedIn DMs</div><div class="kpi-value" id="k-linkedin">0</div><div class="kpi-change">→ today</div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <h3 style="font-size:14px;font-weight:500;color:var(--muted)">All Outreachers</h3>
+        <button class="btn" onclick="openModal()">+ Add</button>
+      </div>
+      <table>
+        <thead><tr><th>Name</th><th>Platform</th><th>Emails Sent</th><th>LinkedIn DMs</th><th>Response Rate</th><th>Score</th><th>Status</th><th></th></tr></thead>
+        <tbody id="out-tbody"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px 0">No outreachers yet</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <h2>Add Outreacher</h2>
+      <label>Full Name</label>
+      <input type="text" id="f-name" placeholder="Jane Smith">
+      <label>Primary Platform</label>
+      <select id="f-platform"><option value="Email">Email</option><option value="LinkedIn">LinkedIn</option><option value="Both">Both</option></select>
+      <label>Daily Target (emails/DMs)</label>
+      <input type="number" id="f-target" placeholder="30">
+      <label>Status</label>
+      <select id="f-status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn" style="flex:2" onclick="add()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if(!localStorage.getItem('crm_user'))window.location.href='../index.html';
+    const COLORS=['linear-gradient(135deg,#1a6bff,#00d4aa)','linear-gradient(135deg,#ff4d6d,#ffaa00)','linear-gradient(135deg,#00d4aa,#1a6bff)','linear-gradient(135deg,#ffaa00,#ff4d6d)'];
+    function get(){return JSON.parse(localStorage.getItem('crm_outreachers')||'[]')}
+    function save(d){localStorage.setItem('crm_outreachers',JSON.stringify(d))}
+    function initials(n){return n.split(' ').map(x=>x[0]).join('').toUpperCase().slice(0,2)}
+    function render(){
+      const data=get();
+      document.getElementById('k-total').textContent=data.length;
+      document.getElementById('k-emails').textContent=data.reduce((s,c)=>s+(c.emailsSent||0),0);
+      document.getElementById('k-linkedin').textContent=data.reduce((s,c)=>s+(c.linkedinDMs||0),0);
+      const rs=data.filter(c=>c.responseRate);
+      document.getElementById('k-resp').textContent=rs.length?Math.round(rs.reduce((s,c)=>s+c.responseRate,0)/rs.length)+'%':'0%';
+      const tb=document.getElementById('out-tbody');
+      if(!data.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px 0">No outreachers yet</td></tr>';return}
+      tb.innerHTML=data.map((c,i)=>{
+        const score=c.score||Math.floor(Math.random()*40+60);
+        return '<tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="background:'+COLORS[i%4]+'">'+initials(c.name)+'</div>'+c.name+'</div></td><td><span class="badge blue">'+(c.platform||'Email')+'</span></td><td>'+(c.emailsSent||0)+'</td><td>'+(c.linkedinDMs||0)+'</td><td>'+(c.responseRate||0)+'%</td><td><div class="score-bar"><div class="score-fill" style="width:'+score+'%"></div></div> <span style="font-size:11px;color:var(--muted);margin-right:6px">'+score+'</span></td><td><span class="badge '+(c.status==='active'?'active':'inactive')+'">'+(c.status==='active'?'Active':'Inactive')+'</span></td><td><button class="del-btn" onclick="del('+i+')">✕</button></td></tr>';
+      }).join('');
+    }
+    function openModal(){document.getElementById('modal').classList.add('open')}
+    function closeModal(){document.getElementById('modal').classList.remove('open')}
+    function add(){
+      const name=document.getElementById('f-name').value.trim();
+      if(!name)return;
+      const d=get();
+      d.push({name,platform:document.getElementById('f-platform').value,target:+document.getElementById('f-target').value||30,status:document.getElementById('f-status').value,emailsSent:0,linkedinDMs:0,responseRate:0,date:new Date().toLocaleDateString('en-GB')});
+      save(d);closeModal();render();
+      document.getElementById('f-name').value='';
+    }
+    function del(i){const d=get();d.splice(i,1);save(d);render()}
+    function logout(){localStorage.removeItem('crm_user');window.location.href='../index.html'}
+    render();
+  </script>
+</body>
+</html>

@@ -7,172 +7,62 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#060c14;--surface:#080f1a;--surface2:#0d1628;--blue:#1a6bff;--text:#e0eaff;--muted:#4a6080;--border:#0e2040;--green:#00d4aa;--red:#ff4d6d;--amber:#ffaa00}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;display:flex;min-height:100vh;font-size:14px}
+    *{margin:0;padding:0;box-sizing:border-box} body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;display:flex;min-height:100vh;font-size:14px}
     .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:2px;position:fixed;top:0;bottom:0;overflow-y:auto}
     .nav-section{font-size:10px;color:var(--muted);padding:12px 12px 6px;letter-spacing:1px;text-transform:uppercase}
-    .nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;display:flex;align-items:center;gap:9px}
-    .nav-item:hover{background:var(--surface2);color:var(--text)}
-    .nav-item.active{background:rgba(26,107,255,.15);color:var(--blue)}
-    .logout{margin-top:auto;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:9px}
-    .logout:hover{background:rgba(255,77,109,.1)}
-    .main{margin-left:220px;padding:28px;flex:1}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-    .topbar h1{font-size:20px;font-weight:600}
-    .btn{background:var(--blue);color:white;border:none;padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500}
-    .btn:hover{opacity:.88}
-    .btn-ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:9px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
-    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden}
-    .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,var(--blue))}
-    .kpi.green{--accent:var(--green)}.kpi.red{--accent:var(--red)}.kpi.amber{--accent:var(--amber)}
-    .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-    .kpi-value{font-size:26px;font-weight:600;margin-bottom:4px}
-    .kpi-change{font-size:11px;color:var(--green)}
-    table{width:100%;border-collapse:collapse}
-    th{text-align:left;font-size:11px;color:var(--muted);padding:0 0 10px;font-weight:400;text-transform:uppercase;letter-spacing:.5px}
-    td{padding:12px 0;font-size:13px;border-top:1px solid var(--border)}
-    .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px}
-    .badge.active{background:rgba(0,212,170,.1);color:var(--green)}
-    .badge.pending{background:rgba(255,170,0,.1);color:var(--amber)}
-    .badge.inactive{background:rgba(255,77,109,.1);color:var(--red)}
-    .badge.blue{background:rgba(26,107,255,.1);color:var(--blue)}
-    .score-bar{height:5px;background:var(--border);border-radius:3px;width:80px;display:inline-block;vertical-align:middle}
-    .score-fill{height:100%;border-radius:3px;background:var(--blue)}
-    .avatar{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin-left:8px}
-    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:100}
-    .modal-bg.open{display:flex}
-    .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;width:420px}
-    .modal h2{margin-bottom:22px;font-size:17px}
-    label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-    input,select,textarea{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:13px;font-family:inherit;margin-bottom:14px;outline:none}
-    input:focus,select:focus,textarea:focus{border-color:var(--blue)}
-    .modal-btns{display:flex;gap:10px}
-    .btn-cancel{flex:1;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:10px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer}
-    .tab-bar{display:flex;gap:8px;margin-bottom:20px}
-    .tab-btn{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);font-family:inherit;transition:all .15s}
-    .tab-btn.active{background:rgba(26,107,255,.15);color:var(--blue);border-color:rgba(26,107,255,.3)}
-    .del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:6px}
-    .del-btn:hover{background:rgba(255,77,109,.1)}
+    .nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:9px}.nav-item:hover{background:var(--surface2);color:var(--text)}.nav-item.active{background:rgba(26,107,255,.15);color:var(--blue)}
+    .logout{margin-top:auto;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:9px}.logout:hover{background:rgba(255,77,109,.1)}
+    .main{margin-left:220px;padding:28px;flex:1}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.topbar h1{font-size:20px}
+    .btn{background:var(--blue);color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:13px;cursor:pointer}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+    .title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px}
+    .chip-grid{display:flex;flex-wrap:wrap;gap:8px}.chip{font-size:12px;border:1px solid #2d3442;background:#1f242e;color:#dce5f8;padding:7px 10px;border-radius:7px}
+    table{width:100%;border-collapse:collapse} th{text-align:left;font-size:11px;color:var(--muted);padding:0 0 10px;font-weight:400;text-transform:uppercase;letter-spacing:.5px}
+    td{padding:11px 0;border-top:1px solid var(--border);font-size:13px}.badge{padding:3px 9px;border-radius:999px;font-size:11px}.active{background:rgba(0,212,170,.12);color:var(--green)}.inactive{background:rgba(255,77,109,.12);color:var(--red)}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center}.modal-bg.open{display:flex}.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;width:420px}
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px;text-transform:uppercase} input,select{width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text)}
   </style>
 </head>
 <body>
-    <nav class="sidebar">
-    <div class="logo" onclick="location.href='dashboard.html'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 12px 24px">
-      <svg width="28" height="28" viewBox="0 0 100 100" fill="none"><ellipse cx="50" cy="55" rx="22" ry="28" fill="none" stroke="#e0eaff" stroke-width="8"/><path d="M35 75 L50 28 L65 75" fill="none" stroke="#e0eaff" stroke-width="8" stroke-linecap="round"/><path d="M38 58 L62 58" fill="none" stroke="#e0eaff" stroke-width="6" stroke-linecap="round"/><circle cx="68" cy="18" r="7" fill="#1a6bff"/><line x1="74" y1="30" x2="74" y2="75" stroke="#e0eaff" stroke-width="3"/><text x="78" y="65" font-family="Georgia,serif" font-size="18" fill="#e0eaff" font-style="italic">che</text></svg>
-      <span style="font-size:16px;font-weight:600;color:#e0eaff">Niche</span>
-    </div>
-    <div class="nav-section">Main</div>
-    <div class="nav-item" onclick="location.href='dashboard.html'"><span>📊</span> Dashboard</div>
-    <div class="nav-section">People</div>
-    <div class="nav-item active" onclick="location.href='cold-callers.html'"><span>📞</span> Cold Callers</div>
-    <div class="nav-item " onclick="location.href='outreachers.html'"><span>✉️</span> Outreachers</div>
-    <div class="nav-item " onclick="location.href='freelancers.html'"><span>💼</span> Freelancers</div>
-    <div class="nav-section">Pipeline</div>
-    <div class="nav-item" onclick="location.href='pipeline.html'"><span>🎯</span> Sales Pipeline</div>
-    <div class="nav-item" onclick="location.href='kanban.html'"><span>📋</span> Kanban</div>
-    <div class="nav-section">Management</div>
-    <div class="nav-item" onclick="location.href='clients.html'"><span>👥</span> Clients</div>
-    <div class="nav-item" onclick="location.href='tasks.html'"><span>✅</span> Tasks</div>
-    <div class="nav-item" onclick="location.href='projects.html'"><span>📁</span> Projects</div>
-    <div class="nav-section">Finance</div>
-    <div class="nav-item" onclick="location.href='finance.html'"><span>💰</span> Revenue</div>
-    <div class="nav-section">Analytics</div>
-    <div class="nav-item" onclick="location.href='analytics.html'"><span>📈</span> Reports</div>
-    <div class="logout" onclick="logout()"><span>⬡</span> Logout</div>
+  <nav class="sidebar">
+    <div class="logo" onclick="location.href='dashboard.html'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 12px 24px"><span style="font-size:16px;font-weight:600;color:#e0eaff">Niche</span></div>
+    <div class="nav-section">People</div><div class="nav-item active">📞 Cold Callers</div>
+    <div class="logout" onclick="logout()">⬡ Logout</div>
   </nav>
   <main class="main">
-    <div class="topbar">
-      <div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">People Management</div>
-        <h1>📞 Cold Callers</h1>
-      </div>
-      <button class="btn" onclick="openModal()">+ Add Caller</button>
-    </div>
+    <div class="topbar"><div><div style="font-size:12px;color:var(--muted)">People Management</div><h1>📞 Cold callers — profiles + KPIs</h1></div><button class="btn" onclick="openModal()">+ Add Caller</button></div>
 
-    <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-label">Total Callers</div><div class="kpi-value" id="k-total">0</div><div class="kpi-change">↑ Active team</div></div>
-      <div class="kpi green"><div class="kpi-label">Calls Today</div><div class="kpi-value" id="k-calls">0</div><div class="kpi-change">↑ vs yesterday</div></div>
-      <div class="kpi amber"><div class="kpi-label">Avg Duration</div><div class="kpi-value" id="k-duration">0m</div><div class="kpi-change">→ per call</div></div>
-      <div class="kpi red"><div class="kpi-label">Conversion Rate</div><div class="kpi-value" id="k-conv">0%</div><div class="kpi-change">→ this week</div></div>
-    </div>
+    <div class="card"><div class="title">Profile card</div><div class="chip-grid"><span class="chip">Name + username</span><span class="chip">Phone + Gmail</span><span class="chip">Start date</span><span class="chip">Salary (fixed/commission)</span><span class="chip">Niche assigned</span></div></div>
+    <div class="card"><div class="title">Daily KPI tracker</div><div class="chip-grid"><span class="chip">Calls made / target 50</span><span class="chip">Pickups / target 30%</span><span class="chip">Meetings booked / target 2%</span><span class="chip">No-shows</span><span class="chip">Actual closes</span></div></div>
+    <div class="card"><div class="title">Call log (per call)</div><div class="chip-grid"><span class="chip">Company called</span><span class="chip">Time</span><span class="chip">Duration</span><span class="chip">Outcome</span><span class="chip">Pain noted</span><span class="chip">Next action</span></div></div>
+    <div class="card"><div class="title">Performance score</div><div class="chip-grid"><span class="chip">A (&gt;80%) → Bonus</span><span class="chip">B (70-89%) → Standard</span><span class="chip">C (50-69%) → Warning</span><span class="chip">D (&lt;50%) → PIP → Fire</span></div></div>
+    <div class="card"><div class="title">Payment</div><div class="chip-grid"><span class="chip">Base $/month</span><span class="chip">Commission $/meeting</span><span class="chip">Bonus $/close</span></div></div>
 
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-        <h3 style="font-size:14px;font-weight:500;color:var(--muted)">All Cold Callers</h3>
-        <div class="tab-bar" style="margin:0">
-          <button class="tab-btn active" onclick="filterCallers('all',this)">All</button>
-          <button class="tab-btn" onclick="filterCallers('active',this)">Active</button>
-          <button class="tab-btn" onclick="filterCallers('inactive',this)">Inactive</button>
-        </div>
-      </div>
-      <table>
-        <thead><tr><th>Caller</th><th>Phone</th><th>Calls Today</th><th>Avg Duration</th><th>Conv. Rate</th><th>Score</th><th>Status</th><th></th></tr></thead>
-        <tbody id="callers-tbody"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px 0">No callers added yet</td></tr></tbody>
-      </table>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3 style="font-size:14px;color:var(--muted)">Active callers roster</h3></div>
+      <table><thead><tr><th>Name</th><th>Phone</th><th>Niche</th><th>Calls</th><th>Pickups</th><th>Meetings</th><th>Score</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
     </div>
   </main>
 
-  <div class="modal-bg" id="modal">
-    <div class="modal">
-      <h2>Add Cold Caller</h2>
-      <label>Full Name</label>
-      <input type="text" id="f-name" placeholder="John Doe">
-      <label>Phone / Extension</label>
-      <input type="text" id="f-phone" placeholder="+1 555 000 0000">
-      <label>Daily Call Target</label>
-      <input type="number" id="f-target" placeholder="50">
-      <label>Status</label>
-      <select id="f-status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn" style="flex:2" onclick="addCaller()">Save</button>
-      </div>
-    </div>
-  </div>
+  <div class="modal-bg" id="modal"><div class="modal"><h3>Add cold caller</h3>
+    <label>Name</label><input id="name"><label>Phone</label><input id="phone"><label>Niche</label><input id="niche" placeholder="Roofing, Med Spa...">
+    <label>Daily calls</label><input id="calls" type="number"><label>Pickups (%)</label><input id="pickups" type="number"><label>Meetings</label><input id="meetings" type="number">
+    <label>Status</label><select id="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+    <div style="display:flex;gap:8px;margin-top:14px"><button class="btn" style="background:#243044" onclick="closeModal()">Cancel</button><button class="btn" onclick="addCaller()">Save</button></div>
+  </div></div>
 
   <script>
     if(!localStorage.getItem('crm_user'))window.location.href='../index.html';
-    const COLORS=['linear-gradient(135deg,#1a6bff,#00d4aa)','linear-gradient(135deg,#ff4d6d,#ffaa00)','linear-gradient(135deg,#00d4aa,#1a6bff)','linear-gradient(135deg,#ffaa00,#ff4d6d)'];
-    function get(){return JSON.parse(localStorage.getItem('crm_callers')||'[]')}
+    const seed=[
+      {name:'Yassine El Mourabit',phone:'+1 (305) 555-0142',niche:'Solar',calls:54,pickups:34,meetings:3,score:88,status:'active'},
+      {name:'Noura Benali',phone:'+1 (917) 555-0190',niche:'Med Spa',calls:49,pickups:29,meetings:1,score:72,status:'active'},
+      {name:'Samir Haddad',phone:'+1 (702) 555-0108',niche:'Roofing',calls:38,pickups:21,meetings:0,score:58,status:'inactive'}
+    ];
+    function get(){const d=JSON.parse(localStorage.getItem('crm_callers')||'null');if(d&&d.length)return d;localStorage.setItem('crm_callers',JSON.stringify(seed));return seed}
     function save(d){localStorage.setItem('crm_callers',JSON.stringify(d))}
-    function initials(n){return n.split(' ').map(x=>x[0]).join('').toUpperCase().slice(0,2)}
-    let currentFilter='all';
-    function render(filter){
-      currentFilter=filter||currentFilter;
-      const data=get().filter(c=>currentFilter==='all'||c.status===currentFilter);
-      const all=get();
-      document.getElementById('k-total').textContent=all.length;
-      document.getElementById('k-calls').textContent=all.reduce((s,c)=>s+(c.callsToday||0),0);
-      const avgs=all.filter(c=>c.avgDuration);
-      document.getElementById('k-duration').textContent=avgs.length?Math.round(avgs.reduce((s,c)=>s+c.avgDuration,0)/avgs.length)+'m':'0m';
-      const convs=all.filter(c=>c.convRate);
-      document.getElementById('k-conv').textContent=convs.length?Math.round(convs.reduce((s,c)=>s+c.convRate,0)/convs.length)+'%':'0%';
-      const tb=document.getElementById('callers-tbody');
-      if(!data.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px 0">No callers found</td></tr>';return}
-      tb.innerHTML=data.map((c,i)=>{
-        const idx=all.indexOf(c);
-        const score=c.score||Math.floor(Math.random()*40+60);
-        return '<tr><td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="background:'+COLORS[i%4]+'">'+initials(c.name)+'</div>'+c.name+'</div></td><td style="color:var(--muted)">'+(c.phone||'—')+'</td><td>'+(c.callsToday||0)+'</td><td>'+(c.avgDuration||0)+'m</td><td>'+(c.convRate||0)+'%</td><td><div class="score-bar"><div class="score-fill" style="width:'+score+'%"></div></div> <span style="font-size:11px;color:var(--muted);margin-right:6px">'+score+'</span></td><td><span class="badge '+(c.status==='active'?'active':'inactive')+'">'+(c.status==='active'?'Active':'Inactive')+'</span></td><td><button class="del-btn" onclick="del('+idx+')">✕</button></td></tr>';
-      }).join('');
-    }
-    function filterCallers(f,el){
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      el.classList.add('active');
-      render(f);
-    }
-    function openModal(){document.getElementById('modal').classList.add('open')}
-    function closeModal(){document.getElementById('modal').classList.remove('open')}
-    function addCaller(){
-      const name=document.getElementById('f-name').value.trim();
-      if(!name)return;
-      const d=get();
-      d.push({name,phone:document.getElementById('f-phone').value.trim(),target:+document.getElementById('f-target').value||50,status:document.getElementById('f-status').value,callsToday:0,avgDuration:0,convRate:0,date:new Date().toLocaleDateString('en-GB')});
-      save(d);closeModal();render();
-      document.getElementById('f-name').value='';document.getElementById('f-phone').value='';document.getElementById('f-target').value='';
-    }
-    function del(i){const d=get();d.splice(i,1);save(d);render()}
+    function render(){document.getElementById('rows').innerHTML=get().map(c=>`<tr><td>${c.name}</td><td>${c.phone}</td><td>${c.niche}</td><td>${c.calls}/50</td><td>${c.pickups}%</td><td>${c.meetings}</td><td>${c.score}%</td><td><span class="badge ${c.status}">${c.status}</span></td></tr>`).join('')}
+    function openModal(){modal.classList.add('open')} function closeModal(){modal.classList.remove('open')}
+    function addCaller(){const d=get();d.push({name:name.value,phone:phone.value,niche:niche.value,calls:+calls.value||0,pickups:+pickups.value||0,meetings:+meetings.value||0,score:Math.min(100,Math.round((+calls.value||0)/50*55+(+pickups.value||0)*.75+(+meetings.value||0)*8)),status:status.value});save(d);closeModal();render();}
     function logout(){localStorage.removeItem('crm_user');window.location.href='../index.html'}
     render();
   </script>

@@ -189,12 +189,55 @@
         </div>
       </div>
     </div>
+    <!-- Projects Status + Employees -->
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:20px">
+      <div class="chart-box">
+        <h3>Projects Status</h3>
+        <div style="position:relative;width:160px;height:160px;margin:16px auto">
+          <canvas id="progressDonut"></canvas>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-size:22px;font-weight:600">100</div>
+            <div style="font-size:11px;color:var(--muted)">Total projects</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1a6bff;margin-left:6px"></span>Completed</span><span>125 Projects</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#00d4aa;margin-left:6px"></span>In Progress</span><span>125 Projects</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d6d;margin-left:6px"></span>Cancelled</span><span>125 Projects</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffaa00;margin-left:6px"></span>Yet to Start</span><span>125 Projects</span></div>
+        </div>
+      </div>
+      <div class="table-box">
+        <h3>Employees <span class="export-btn" onclick="showAddEmp()">+ Add Employee</span></h3>
+        <table>
+          <thead><tr><th>ID</th><th>Employee Name</th><th>Email</th><th>Contact</th><th>Gender</th><th>Status</th></tr></thead>
+          <tbody id="emp-tbody">
+            <tr><td style="color:var(--muted)">1001</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a6bff,#00d4aa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">RA</div>Ricky Antony</div></td><td style="color:var(--muted)">abc@gmail.com</td><td style="color:var(--muted)">+91 123 456 7890</td><td style="color:var(--muted)">Male</td><td><span class="badge active">Active</span></td></tr>
+            <tr><td style="color:var(--muted)">1002</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ff4d6d,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">SM</div>Sarah Mills</div></td><td style="color:var(--muted)">sarah@gmail.com</td><td style="color:var(--muted)">+1 555 234 5678</td><td style="color:var(--muted)">Female</td><td><span class="badge pending">Pending</span></td></tr>
+            <tr><td style="color:var(--muted)">1003</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#00d4aa,#1a6bff);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">JD</div>John Doe</div></td><td style="color:var(--muted)">john@gmail.com</td><td style="color:var(--muted)">+44 777 123 4567</td><td style="color:var(--muted)">Male</td><td><span class="badge active">Active</span></td></tr>
+            <tr><td style="color:var(--muted)">1004</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ffaa00,#ff4d6d);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">AL</div>Anna Lee</div></td><td style="color:var(--muted)">anna@gmail.com</td><td style="color:var(--muted)">+61 400 987 654</td><td style="color:var(--muted)">Female</td><td><span class="badge active">Active</span></td></tr>
+            <tr><td style="color:var(--muted)">1005</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a6bff,#ff4d6d);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">MK</div>Mike Khan</div></td><td style="color:var(--muted)">mike@gmail.com</td><td style="color:var(--muted)">+92 300 111 2233</td><td style="color:var(--muted)">Male</td><td><span class="badge pending">Pending</span></td></tr>
+          </tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--muted)">
+          <span>Showing 1 to 5 of 10 entries</span>
+          <div style="display:flex;gap:6px">
+            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">‹</button>
+            <button style="background:var(--blue);border:none;color:white;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">1</button>
+            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">2</button>
+            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Latest Clients + Active Projects -->
     <div class="bottom-row">
       <div class="table-box">
         <h3>Active Projects <span class="export-btn">Export</span></h3>
         <table>
           <thead><tr><th>Project</th><th>Progress</th><th>Status</th></tr></thead>
-          <tbody id="proj-tbody">
+          <tbody>
             <tr><td>CRM NiChe</td><td><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div></td><td><span class="badge inprogress">In Progress</span></td></tr>
             <tr><td>Landing Page</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div></td><td><span class="badge pending">Pending</span></td></tr>
             <tr><td>Mobile App</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--green)"></div></div></td><td><span class="badge active">Done</span></td></tr>
@@ -276,6 +319,19 @@
         plugins: { legend: { position: 'bottom', labels: { color: '#4a6080', font: { size: 11 }, padding: 12 } } }
       }
     });
+
+    // Progress Donut
+    const pdCtx = document.getElementById('progressDonut').getContext('2d');
+    new Chart(pdCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Completed','In Progress','Cancelled','Yet to Start'],
+        datasets: [{ data: [125,125,125,125], backgroundColor: ['#1a6bff','#00d4aa','#ff4d6d','#ffaa00'], borderWidth: 0 }]
+      },
+      options: { responsive: true, cutout: '75%', plugins: { legend: { display: false } } }
+    });
+
+    function showAddEmp() { alert('Employee form coming soon!'); }
 
     document.querySelectorAll('.tab').forEach(t => {
       t.addEventListener('click', () => {

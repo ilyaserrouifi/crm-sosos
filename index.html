@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="Niche CRM - Plateforme de gestion complète pour entreprises modernes. Connectez-vous à votre espace de travail." />
-  <meta name="keywords" content="CRM, Niche, plateforme, gestion leads, dashboard, analytique" />
+  <meta name="keywords" content="CRM, Niche, plateforme, gestion leads, dashboard, analytique, freelancers, clients" />
   <meta name="author" content="Niche CRM" />
   <title>Niche CRM — Connexion | Plateforme intelligente</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -110,7 +110,7 @@
       position: relative;
       z-index: 12;
       width: 100%;
-      max-width: 520px;
+      max-width: 550px;
       margin: 0 auto;
       animation: fadeInUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) both;
     }
@@ -378,7 +378,7 @@
     }
 
     /* ============================================ */
-    /* 11. NAVIGATION RAPIDE VERS PAGES            */
+    /* 11. NAVIGATION RAPIDE VERS PAGES (MODULES)  */
     /* ============================================ */
     .quick-preview {
       margin-top: 1.5rem;
@@ -560,7 +560,9 @@
       <a href="pages/tasks.html">Tâches</a>
       <a href="pages/finance.html">Finance</a>
       <a href="pages/analytics.html">Analytics</a>
-      <a href="pages/settings.html">Paramètres</a>
+      <a href="pages/pipeline.html">Pipeline</a>
+      <a href="pages/projects.html">Projets</a>
+      <a href="pages/reports.html">Rapports</a>
     </div>
   </div>
 </div>
@@ -597,6 +599,9 @@
       return;
     }
 
+    // Simulation de vérification (à connecter avec votre backend)
+    console.log(`Connexion avec ${email} - Rôle: ${currentRole}`);
+
     if (currentRole === 'client') {
       window.location.href = 'pages/clients.html';
     } else {
@@ -620,9 +625,20 @@
   emailField.addEventListener('keypress', onEnterKey);
   pwdField.addEventListener('keypress', onEnterKey);
 
-  // Petite animation d'apparition des icônes au chargement (optionnelle)
+  // Animation d'apparition des éléments (optionnelle)
   window.addEventListener('DOMContentLoaded', () => {
     console.log("Niche CRM - Interface de connexion prête (1000+ lignes de précision)");
+    // Petite animation supplémentaire sur les icônes
+    const tiles = document.querySelectorAll('.icon-tile');
+    tiles.forEach((tile, index) => {
+      tile.style.opacity = '0';
+      tile.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        tile.style.transition = 'all 0.3s ease';
+        tile.style.opacity = '1';
+        tile.style.transform = 'translateY(0)';
+      }, 50 * index);
+    });
   });
 </script>
 </body>

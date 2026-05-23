@@ -1,351 +1,840 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — CRM NiChe</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #060c14; --surface: #080f1a; --surface2: #0d1628;
-      --blue: #1a6bff; --blue2: #0d4fbf; --blue-glow: rgba(26,107,255,0.2);
-      --text: #e0eaff; --muted: #4a6080; --border: #0e2040;
-      --green: #00d4aa; --red: #ff4d6d; --amber: #ffaa00;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; min-height: 100vh; font-size: 14px; }
-    .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; gap: 2px; position: fixed; top: 0; bottom: 0; }
-    .logo { font-size: 17px; font-weight: 600; color: var(--blue); padding: 8px 12px 20px; letter-spacing: -0.3px; }
-    .nav-section { font-size: 10px; color: var(--muted); padding: 12px 12px 6px; letter-spacing: 1px; text-transform: uppercase; }
-    .nav-item { padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all 0.15s; display: flex; align-items: center; gap: 9px; }
-    .nav-item:hover { background: var(--surface2); color: var(--text); }
-    .nav-item.active { background: rgba(26,107,255,0.15); color: var(--blue); }
-    .nav-item .icon { width: 16px; text-align: center; }
-    .logout { margin-top: auto; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--red); display: flex; align-items: center; gap: 9px; }
-    .logout:hover { background: rgba(255,77,109,0.1); }
-    .main { margin-left: 220px; padding: 28px; flex: 1; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-    .topbar h1 { font-size: 20px; font-weight: 600; }
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
-    .user-pill { background: var(--surface2); border: 1px solid var(--border); padding: 7px 14px; border-radius: 20px; font-size: 13px; color: var(--muted); }
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; overflow: hidden; }
-    .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent, var(--blue)); }
-    .kpi.green { --accent: var(--green); }
-    .kpi.red { --accent: var(--red); }
-    .kpi.amber { --accent: var(--amber); }
-    .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-    .kpi-value { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
-    .kpi-change { font-size: 11px; color: var(--green); }
-    .kpi-change.down { color: var(--red); }
-    .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 20px; }
-    .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-    .chart-box h3 { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-    .chart-tabs { display: flex; gap: 6px; }
-    .tab { font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; background: var(--surface2); color: var(--muted); border: none; font-family: inherit; transition: all 0.15s; }
-    .tab.active { background: var(--blue); color: white; }
-    .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .table-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-    .table-box h3 { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; }
-    .export-btn { font-size: 11px; color: var(--blue); background: rgba(26,107,255,0.1); border: 1px solid rgba(26,107,255,0.2); padding: 4px 10px; border-radius: 6px; cursor: pointer; }
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; font-size: 11px; color: var(--muted); padding: 0 0 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
-    td { padding: 10px 0; font-size: 13px; border-top: 1px solid var(--border); }
-    .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; }
-    .badge.active { background: rgba(0,212,170,0.1); color: var(--green); }
-    .badge.pending { background: rgba(255,170,0,0.1); color: var(--amber); }
-    .badge.inprogress { background: rgba(26,107,255,0.1); color: var(--blue); }
-    .progress-bar { height: 4px; background: var(--border); border-radius: 2px; width: 80px; }
-    .progress-fill { height: 100%; border-radius: 2px; background: var(--blue); }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Niche CRM — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#2b2fff;
+  --blue2:#4f5aff;
+  --blue3:rgba(43,47,255,0.15);
+  --glow:rgba(43,47,255,0.35);
+  --bg:#0b0b0e;
+  --surface:rgba(255,255,255,0.03);
+  --surface2:rgba(255,255,255,0.055);
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(43,47,255,0.2);
+  --text:#ededf2;
+  --muted:rgba(237,237,242,0.42);
+  --muted2:rgba(237,237,242,0.22);
+  --green:#22c55e;
+  --red:#ef4444;
+  --amber:#f59e0b;
+  --sidebar-w:220px;
+}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+}
+
+/* ── DOT GRID ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,0.032) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0;
+}
+/* ── BLOBS ── */
+.blob{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;}
+.b1{width:480px;height:480px;background:rgba(43,47,255,0.1);top:-120px;left:160px;}
+.b2{width:320px;height:320px;background:rgba(43,47,255,0.06);bottom:-60px;right:80px;}
+
+/* ═══════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════ */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;
+  width:var(--sidebar-w);
+  background:rgba(11,11,14,0.92);
+  border-right:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  z-index:100;
+  display:flex;flex-direction:column;
+  padding:0 0 20px;
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:11px;
+  padding:20px 18px 18px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:8px;
+  text-decoration:none;
+}
+.sidebar-logo svg{width:38px;height:38px;flex-shrink:0;}
+.logo-text .n{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px;}
+.logo-text .s{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:1px;}
+
+.nav-section{
+  padding:0 10px;
+  margin-bottom:4px;
+}
+.nav-label{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted2);padding:8px 8px 6px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;
+  border-radius:9px;
+  color:var(--muted);
+  font-size:13px;font-weight:400;
+  text-decoration:none;
+  transition:all .16s;
+  cursor:pointer;
+  border:1px solid transparent;
+  margin-bottom:2px;
+}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item:hover svg{opacity:1;}
+.nav-item.active{
+  background:rgba(43,47,255,0.14);
+  border-color:rgba(43,47,255,0.25);
+  color:#fff;
+}
+.nav-item.active svg{opacity:1;}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:0 10px;
+}
+.user-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;
+}
+.avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#7c3aed);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;color:#fff;flex-shrink:0;
+}
+.user-info .name{font-size:12px;font-weight:500;color:var(--text);}
+.user-info .role{font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* ═══════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════ */
+.main{
+  margin-left:var(--sidebar-w);
+  flex:1;
+  height:100vh;
+  overflow-y:auto;
+  position:relative;
+  z-index:10;
+  padding:28px 28px 40px;
+}
+.main::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-track{background:transparent;}
+.main::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}
+
+/* ── TOP BAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;
+}
+.topbar-left h1{font-size:22px;font-weight:600;letter-spacing:-.5px;}
+.topbar-left p{font-size:13px;color:var(--muted);margin-top:3px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.btn-sm{
+  padding:8px 14px;border-radius:9px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);font-size:12.5px;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-sm:hover{background:var(--surface2);color:var(--text);}
+.btn-primary{
+  padding:8px 16px;border-radius:9px;border:none;
+  background:var(--blue);color:#fff;font-size:12.5px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .17s;
+  box-shadow:0 0 20px var(--glow);
+}
+.btn-primary:hover{background:var(--blue2);}
+
+/* ── DATE TABS ── */
+.date-tabs{display:flex;gap:6px;margin-bottom:24px;}
+.dtab{
+  padding:6px 14px;border-radius:7px;font-size:12px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;cursor:pointer;
+  transition:all .15s;
+}
+.dtab.on{background:var(--blue3);border-color:var(--blue2);color:#fff;}
+.dtab:hover:not(.on){background:var(--surface2);color:var(--text);}
+
+/* ── STAT CARDS ── */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:20px;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px 20px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.stat-card:hover{border-color:rgba(43,47,255,0.3);}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(43,47,255,0.4),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.stat-card:hover::before{opacity:1;}
+.stat-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.stat-value{font-size:26px;font-weight:600;letter-spacing:-1px;margin-bottom:6px;}
+.stat-sub{font-size:11.5px;color:var(--muted);}
+.stat-progress{
+  margin-top:12px;height:3px;
+  background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;
+}
+.stat-bar{height:100%;border-radius:2px;background:var(--blue);transition:width 1s ease;}
+.stat-badge{
+  position:absolute;top:16px;right:16px;
+  font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500;
+}
+.badge-up{background:rgba(34,197,94,0.15);color:var(--green);}
+.badge-down{background:rgba(239,68,68,0.12);color:var(--red);}
+.badge-warn{background:rgba(245,158,11,0.12);color:var(--amber);}
+
+/* ── MIDDLE ROW ── */
+.mid-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+/* ── PANEL ── */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.panel-title{font-size:13px;font-weight:500;color:var(--text);}
+.panel-action{font-size:11px;color:rgba(100,110,255,.8);cursor:pointer;text-decoration:none;}
+.panel-action:hover{color:#fff;}
+
+/* Pipeline */
+.pipeline-stages{display:flex;flex-direction:column;gap:8px;}
+.pipeline-row{
+  display:flex;align-items:center;gap:10px;
+}
+.pipe-stage{font-size:11.5px;color:var(--muted);width:100px;flex-shrink:0;}
+.pipe-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;}
+.pipe-bar{height:100%;border-radius:3px;background:var(--blue);}
+.pipe-val{font-size:11px;color:var(--text);width:36px;text-align:right;flex-shrink:0;}
+.pipe-pct{font-size:10px;color:var(--muted);width:30px;text-align:right;flex-shrink:0;}
+
+/* Team leaderboard */
+.leader-list{display:flex;flex-direction:column;gap:9px;}
+.leader-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid transparent;
+  border-radius:9px;
+  transition:all .15s;cursor:pointer;
+}
+.leader-row:hover{background:var(--surface2);border-color:var(--border);}
+.leader-rank{font-size:11px;color:var(--muted);width:14px;text-align:center;}
+.leader-rank.gold{color:#f59e0b;}
+.leader-rank.silver{color:#94a3b8;}
+.leader-rank.bronze{color:#cd7c4a;}
+.leader-av{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:#fff;flex-shrink:0;
+}
+.leader-info{flex:1;}
+.leader-name{font-size:12px;font-weight:500;}
+.leader-meta{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.leader-val{font-size:12px;font-weight:500;color:var(--green);}
+
+/* Finance snapshot */
+.fin-rows{display:flex;flex-direction:column;gap:9px;}
+.fin-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;
+  background:rgba(255,255,255,0.02);
+  border-radius:8px;
+}
+.fin-label{font-size:12px;color:var(--muted);}
+.fin-val{font-size:14px;font-weight:500;}
+.fin-val.green{color:var(--green);}
+.fin-val.red{color:var(--red);}
+.fin-divider{height:1px;background:var(--border);margin:4px 0;}
+
+/* ── BOTTOM ROW ── */
+.bot-grid{
+  display:grid;
+  grid-template-columns:1.8fr 1fr;
+  gap:14px;
+}
+
+/* Alert list */
+.alert-list{display:flex;flex-direction:column;gap:7px;}
+.alert-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 12px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid transparent;
+  border-radius:9px;
+  transition:all .15s;cursor:pointer;
+}
+.alert-item:hover{background:var(--surface2);}
+.alert-dot{
+  width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;
+}
+.alert-dot.red{background:var(--red);box-shadow:0 0 6px var(--red);}
+.alert-dot.amber{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+.alert-dot.blue{background:var(--blue2);box-shadow:0 0 6px var(--blue2));}
+.alert-content{flex:1;}
+.alert-title{font-size:12.5px;font-weight:500;}
+.alert-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+.alert-time{font-size:10px;color:var(--muted2);flex-shrink:0;margin-top:2px;}
+
+/* Activity feed */
+.activity-list{display:flex;flex-direction:column;gap:0;}
+.activity-item{
+  display:flex;gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.activity-item:last-child{border-bottom:none;}
+.act-icon{
+  width:28px;height:28px;border-radius:8px;
+  background:var(--blue3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:13px;
+}
+.act-content{flex:1;}
+.act-text{font-size:12px;line-height:1.5;}
+.act-text strong{color:var(--text);font-weight:500;}
+.act-time{font-size:10px;color:var(--muted2);margin-top:2px;}
+
+/* ── MINI CHART (CSS bars) ── */
+.mini-chart{
+  display:flex;align-items:flex-end;gap:4px;
+  height:48px;margin-top:10px;
+}
+.mini-bar{
+  flex:1;border-radius:3px 3px 0 0;
+  background:rgba(43,47,255,0.35);
+  transition:background .2s;cursor:pointer;
+  position:relative;
+}
+.mini-bar:hover{background:rgba(43,47,255,0.7);}
+.mini-bar.hi{background:rgba(43,47,255,0.75);}
+
+/* ── SCROLL FADE ── */
+.fade-in{animation:fi .4s ease both;}
+@keyframes fi{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.fd1{animation-delay:.05s;}
+.fd2{animation-delay:.1s;}
+.fd3{animation-delay:.15s;}
+.fd4{animation-delay:.2s;}
+.fd5{animation-delay:.25s;}
+.fd6{animation-delay:.3s;}
+
+/* ── LIVE DOT ── */
+.live{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;color:var(--green);
+  background:rgba(34,197,94,0.1);
+  border:1px solid rgba(34,197,94,0.2);
+  padding:3px 9px 3px 6px;border-radius:20px;
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* ── PROGRESS RING ── */
+.ring-wrap{display:flex;align-items:center;gap:14px;}
+.ring-svg{width:52px;height:52px;flex-shrink:0;}
+.ring-circle{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:4;}
+.ring-prog{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1s ease;transform:rotate(-90deg);transform-origin:50% 50%;}
+
+/* scrollbar firefox */
+.main{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent;}
+</style>
 </head>
 <body>
-  <nav class="sidebar">
-    <div class="logo" onclick="location.href='dashboard.html'" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 12px 24px">
-  <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="50" cy="55" rx="22" ry="28" fill="none" stroke="#e0eaff" stroke-width="8"/>
-    <path d="M35 75 L50 28 L65 75" fill="none" stroke="#e0eaff" stroke-width="8" stroke-linecap="round"/>
-    <path d="M38 58 L62 58" fill="none" stroke="#e0eaff" stroke-width="6" stroke-linecap="round"/>
-    <circle cx="68" cy="18" r="7" fill="#1a6bff"/>
-    <line x1="74" y1="30" x2="74" y2="75" stroke="#e0eaff" stroke-width="3" stroke-linecap="round"/>
-    <text x="78" y="65" font-family="Georgia,serif" font-size="18" fill="#e0eaff" font-style="italic">che</text>
-  </svg>
-  <span style="font-size:16px;font-weight:600;color:#e0eaff;letter-spacing:-0.3px">Niche</span>
-</div>
-    <div class="nav-section">Main</div>
-    <div class="nav-item active"><span class="icon">▣</span> Dashboard</div>
-    <div class="nav-item" onclick="location.href='clients.html'"><span class="icon">👥</span> Clients</div>
-    <div class="nav-item" onclick="location.href='leads.html'"><span class="icon">🎯</span> Leads</div>
-    <div class="nav-item" onclick="location.href='tasks.html'"><span class="icon">✅</span> Tasks</div>
-    <div class="nav-section">Analytics</div>
-    <div class="nav-item"><span class="icon">📊</span> Reports</div>
-    <div class="nav-item"><span class="icon">⚡</span> Performance</div>
-    <div class="logout" onclick="logout()"><span class="icon">⬡</span> Logout</div>
-  </nav>
-  <main class="main">
-    <div class="topbar">
-      <div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Welcome back 👋</div>
-        <h1 id="uname">Dashboard</h1>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <a class="sidebar-logo" href="../index.html">
+    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="82" cy="22" r="12" fill="#2b2fff"/>
+      <rect x="74" y="34" width="4" height="56" rx="2" fill="white"/>
+      <text x="80" y="90" font-family="Georgia,'Times New Roman',serif" font-size="28" font-weight="700" fill="white">che</text>
+      <ellipse cx="36" cy="66" rx="28" ry="40" fill="white"/>
+      <path d="M22 42 L22 90 L33 90 L33 62 L48 90 L52 90 L52 42 L41 42 L41 68 L27 42 Z" fill="#0b0b0e"/>
+    </svg>
+    <div class="logo-text">
+      <div class="n">Niche</div>
+      <div class="s">CRM Platform</div>
+    </div>
+  </a>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <a class="nav-item active" href="dashboard.html">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor" opacity=".5"/><rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor" opacity=".5"/><rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor" opacity=".3"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" href="leads.html">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 6H21M3 12H21M3 18H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Pipeline
+    </a>
+    <a class="nav-item" href="analytics.html">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".5"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor"/><rect x="17" y="4" width="4" height="17" rx="1" fill="currentColor" opacity=".7"/></svg>
+      Analytics
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">People</div>
+    <a class="nav-item" href="cold-callers.html">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 10.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Cold Callers
+    </a>
+    <a class="nav-item" href="outreachers.html">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="2"/></svg>
+      Outreachers
+    </a>
+    <a class="nav-item" href="freelancers.html">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Freelancers
+    </a>
+    <a class="nav-item" href="clients.html">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="2"/></svg>
+      Clients
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Work</div>
+    <a class="nav-item" href="tasks.html">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Tasks
+    </a>
+    <a class="nav-item" href="finance.html">
+      <svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Finance
+    </a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-pill">
+      <div class="avatar">IE</div>
+      <div class="user-info">
+        <div class="name">Illass Erroulfi</div>
+        <div class="role">Admin</div>
       </div>
-      <div class="topbar-right">
-        <div class="user-pill" id="ubadge">User</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar fade-in">
+    <div class="topbar-left">
+      <h1>Dashboard</h1>
+      <p>Saturday, May 23, 2026</p>
+    </div>
+    <div class="topbar-right">
+      <span class="live"><span class="live-dot"></span>Live</span>
+      <button class="btn-sm">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export
+      </button>
+      <button class="btn-primary">+ New Lead</button>
+    </div>
+  </div>
+
+  <!-- DATE TABS -->
+  <div class="date-tabs fade-in fd1">
+    <button class="dtab on" onclick="setTab(this)">Today</button>
+    <button class="dtab" onclick="setTab(this)">This Week</button>
+    <button class="dtab" onclick="setTab(this)">This Month</button>
+    <button class="dtab" onclick="setTab(this)">Q2 2026</button>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card fade-in fd1">
+      <div class="stat-label">Calls Made</div>
+      <div class="stat-badge badge-up">↑ 12%</div>
+      <div class="stat-value">847</div>
+      <div class="stat-sub">Target: 1,500 / day</div>
+      <div class="stat-progress"><div class="stat-bar" style="width:56%"></div></div>
+    </div>
+    <div class="stat-card fade-in fd2">
+      <div class="stat-label">Meetings Booked</div>
+      <div class="stat-badge badge-up">↑ 3</div>
+      <div class="stat-value">18</div>
+      <div class="stat-sub">Target: 30 / day</div>
+      <div class="stat-progress"><div class="stat-bar" style="width:60%"></div></div>
+    </div>
+    <div class="stat-card fade-in fd3">
+      <div class="stat-label">Deals Closed</div>
+      <div class="stat-badge badge-warn">On track</div>
+      <div class="stat-value">4</div>
+      <div class="stat-sub">Target: 6 / day</div>
+      <div class="stat-progress"><div class="stat-bar" style="width:67%"></div></div>
+    </div>
+    <div class="stat-card fade-in fd4">
+      <div class="stat-label">Revenue Today</div>
+      <div class="stat-badge badge-up">↑ 8%</div>
+      <div class="stat-value">$14,200</div>
+      <div class="stat-sub">MRR: $38,500</div>
+      <div class="stat-progress"><div class="stat-bar" style="width:37%"></div></div>
+    </div>
+  </div>
+
+  <!-- MID ROW -->
+  <div class="mid-grid">
+
+    <!-- PIPELINE FUNNEL -->
+    <div class="panel fade-in fd2">
+      <div class="panel-head">
+        <span class="panel-title">Pipeline Funnel</span>
+        <a class="panel-action" href="leads.html">View board →</a>
+      </div>
+      <div class="pipeline-stages">
+        <div class="pipeline-row">
+          <span class="pipe-stage">Leads</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:100%"></div></div>
+          <span class="pipe-val">1,500</span>
+          <span class="pipe-pct">100%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Contacted</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:53%"></div></div>
+          <span class="pipe-val">800</span>
+          <span class="pipe-pct">53%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Meeting</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:8%"></div></div>
+          <span class="pipe-val">30</span>
+          <span class="pipe-pct">2%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Qualified</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:6%"></div></div>
+          <span class="pipe-val">22</span>
+          <span class="pipe-pct">1.5%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Proposal</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:4%"></div></div>
+          <span class="pipe-val">15</span>
+          <span class="pipe-pct">1%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Negotiating</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:3%"></div></div>
+          <span class="pipe-val">9</span>
+          <span class="pipe-pct">0.6%</span>
+        </div>
+        <div class="pipeline-row">
+          <span class="pipe-stage">Closed Won</span>
+          <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:2.5%;background:var(--green)"></div></div>
+          <span class="pipe-val" style="color:var(--green)">6</span>
+          <span class="pipe-pct">0.4%</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:10px 12px;background:rgba(43,47,255,0.06);border:1px solid var(--border2);border-radius:9px;display:flex;justify-content:space-between;">
+        <div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Total Pipeline</div>
+          <div style="font-size:18px;font-weight:600;margin-top:2px;">$248,000</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">At Risk</div>
+          <div style="font-size:18px;font-weight:600;margin-top:2px;color:var(--amber)">$32,000</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">7-day call volume</div>
+        <div class="mini-chart">
+          <div class="mini-bar" style="height:55%"></div>
+          <div class="mini-bar" style="height:70%"></div>
+          <div class="mini-bar" style="height:45%"></div>
+          <div class="mini-bar" style="height:85%"></div>
+          <div class="mini-bar hi" style="height:100%"></div>
+          <div class="mini-bar" style="height:60%"></div>
+          <div class="mini-bar" style="height:72%"></div>
+        </div>
       </div>
     </div>
 
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div class="kpi-label">Total Clients</div>
-        <div class="kpi-value" id="k-clients">0</div>
-        <div class="kpi-change">↑ Added this week</div>
+    <!-- LEADERBOARD -->
+    <div class="panel fade-in fd3">
+      <div class="panel-head">
+        <span class="panel-title">Team Leaderboard</span>
+        <a class="panel-action" href="analytics.html">Full report →</a>
       </div>
-      <div class="kpi green">
-        <div class="kpi-label">Active Leads</div>
-        <div class="kpi-value" id="k-leads">0</div>
-        <div class="kpi-change">↑ This month</div>
-      </div>
-      <div class="kpi amber">
-        <div class="kpi-label">Pending Tasks</div>
-        <div class="kpi-value" id="k-tasks">0</div>
-        <div class="kpi-change">→ To follow up</div>
-      </div>
-      <div class="kpi red">
-        <div class="kpi-label">Closed Deals</div>
-        <div class="kpi-value">0</div>
-        <div class="kpi-change down">→ Monthly target</div>
-      </div>
-    </div>
-
-    <div class="charts-row">
-      <div class="chart-box">
-        <h3>Projects Overview <div class="chart-tabs"><button class="tab active">Week</button><button class="tab">Month</button><button class="tab">Year</button></div></h3>
-        <canvas id="barChart" height="100"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Lead Status</h3>
-        <canvas id="donutChart" height="160"></canvas>
-      </div>
-    </div>
-
-    
-    <!-- WORLD MAP ROW -->
-    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:20px">
-      <div class="chart-box">
-        <h3>Active Users</h3>
-        <div style="background:#0d1628;border-radius:10px;overflow:hidden;position:relative">
-          <div style="position:absolute;top:8px;left:8px;z-index:2;display:flex;flex-direction:column;gap:4px">
-            <button onclick="mapZoom(1.2)" style="background:#0e2040;border:1px solid #1a6bff;color:#1a6bff;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">+</button>
-            <button onclick="mapZoom(0.8)" style="background:#0e2040;border:1px solid #1a6bff;color:#1a6bff;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">−</button>
+      <div class="leader-list">
+        <div class="leader-row">
+          <span class="leader-rank gold">1</span>
+          <div class="leader-av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">KM</div>
+          <div class="leader-info">
+            <div class="leader-name">Karim M.</div>
+            <div class="leader-meta">8 meetings · 3 closes</div>
           </div>
-          <svg id="world-svg" viewBox="0 0 1010 666" style="width:100%;height:260px;display:block" xmlns="http://www.w3.org/2000/svg">
-            <rect width="1010" height="666" fill="#0d1628"/>
-            <!-- Simplified but realistic country shapes -->
-            <!-- Russia -->
-            <path d="M520 80 L620 75 L720 80 L780 90 L800 110 L780 130 L720 135 L680 150 L650 145 L600 140 L560 145 L530 140 L510 120 L500 100 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- Canada -->
-            <path d="M80 90 L200 85 L240 95 L250 120 L230 140 L200 150 L160 155 L120 150 L80 140 L60 120 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- USA -->
-            <path d="M80 155 L230 150 L250 165 L245 200 L210 215 L160 220 L110 215 L70 200 L60 175 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- Europe cluster -->
-            <path d="M430 105 L490 100 L510 115 L505 140 L480 150 L450 148 L428 135 L425 115 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- UK -->
-            <path d="M400 108 L418 105 L420 120 L415 130 L400 128 L395 115 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- China -->
-            <path d="M680 130 L760 125 L790 140 L785 175 L750 190 L700 185 L670 170 L665 150 Z" fill="#1a3a6b" stroke="#00d4aa" stroke-width="0.8"/>
-            <!-- India -->
-            <path d="M670 175 L710 170 L725 185 L720 220 L700 240 L680 235 L665 215 L660 190 Z" fill="#1a3a6b" stroke="#00d4aa" stroke-width="0.8"/>
-            <!-- Africa -->
-            <path d="M440 195 L490 190 L510 205 L515 260 L500 300 L475 310 L450 300 L435 255 L430 210 Z" fill="#1a3a6b" stroke="#ffaa00" stroke-width="0.8"/>
-            <!-- Brazil -->
-            <path d="M200 270 L260 260 L285 280 L280 330 L255 355 L220 350 L195 325 L185 290 Z" fill="#1a3a6b" stroke="#ff4d6d" stroke-width="0.8"/>
-            <!-- Australia -->
-            <path d="M730 310 L810 305 L840 325 L835 375 L800 390 L755 385 L725 365 L720 335 Z" fill="#1a3a6b" stroke="#ffaa00" stroke-width="0.8"/>
-            <!-- Mexico -->
-            <path d="M85 215 L140 210 L155 225 L145 250 L110 255 L80 245 L75 228 Z" fill="#1a3a6b" stroke="#1a6bff" stroke-width="0.8"/>
-            <!-- Japan -->
-            <path d="M800 140 L820 135 L828 150 L820 165 L800 162 L793 150 Z" fill="#1a3a6b" stroke="#00d4aa" stroke-width="0.8"/>
-            <!-- Pakistan -->
-            <path d="M630 155 L665 150 L670 170 L658 188 L635 185 L620 170 L622 158 Z" fill="#1a3a6b" stroke="#ff4d6d" stroke-width="0.8"/>
-            <!-- Dot indicators on countries -->
-            <circle cx="165" cy="185" r="5" fill="#1a6bff" opacity="0.9"/>
-            <circle cx="165" cy="185" r="10" fill="#1a6bff" opacity="0.2"/>
-            <circle cx="460" cy="125" r="4" fill="#1a6bff" opacity="0.9"/>
-            <circle cx="460" cy="125" r="8" fill="#1a6bff" opacity="0.2"/>
-            <circle cx="710" cy="185" r="5" fill="#00d4aa" opacity="0.9"/>
-            <circle cx="710" cy="185" r="10" fill="#00d4aa" opacity="0.2"/>
-            <circle cx="470" cy="255" r="4" fill="#ffaa00" opacity="0.9"/>
-            <circle cx="407" cy="115" r="4" fill="#1a6bff" opacity="0.9"/>
-            <circle cx="775" cy="345" r="4" fill="#ffaa00" opacity="0.9"/>
-            <circle cx="648" cy="168" r="3" fill="#ff4d6d" opacity="0.9"/>
+          <span class="leader-val">$12,000</span>
+        </div>
+        <div class="leader-row">
+          <span class="leader-rank silver">2</span>
+          <div class="leader-av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">SL</div>
+          <div class="leader-info">
+            <div class="leader-name">Sofia L.</div>
+            <div class="leader-meta">6 meetings · 2 closes</div>
+          </div>
+          <span class="leader-val">$8,000</span>
+        </div>
+        <div class="leader-row">
+          <span class="leader-rank bronze">3</span>
+          <div class="leader-av" style="background:linear-gradient(135deg,#06b6d4,#2b2fff)">AR</div>
+          <div class="leader-info">
+            <div class="leader-name">Amir R.</div>
+            <div class="leader-meta">4 meetings · 1 close</div>
+          </div>
+          <span class="leader-val">$4,000</span>
+        </div>
+        <div class="leader-row">
+          <span class="leader-rank" style="color:var(--muted2)">4</span>
+          <div class="leader-av" style="background:linear-gradient(135deg,#10b981,#059669)">YB</div>
+          <div class="leader-info">
+            <div class="leader-name">Yasmine B.</div>
+            <div class="leader-meta">3 meetings · 1 close</div>
+          </div>
+          <span class="leader-val">$3,200</span>
+        </div>
+        <div class="leader-row" style="opacity:.6;">
+          <span class="leader-rank" style="color:var(--muted2)">5</span>
+          <div class="leader-av" style="background:linear-gradient(135deg,#f43f5e,#e11d48)">OM</div>
+          <div class="leader-info">
+            <div class="leader-name">Omar M.</div>
+            <div class="leader-meta">1 meeting · 0 closes</div>
+          </div>
+          <span class="leader-val" style="color:var(--amber)">$0</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:9px;display:flex;align-items:center;gap:8px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;box-shadow:0 0 6px var(--red)"></div>
+        <div style="font-size:11.5px;">Omar M. needs attention — <span style="color:var(--red)">0 closes this week</span></div>
+      </div>
+    </div>
+
+    <!-- FINANCE SNAPSHOT -->
+    <div class="panel fade-in fd4">
+      <div class="panel-head">
+        <span class="panel-title">Finance Snapshot</span>
+        <a class="panel-action" href="finance.html">Full P&L →</a>
+      </div>
+      <div class="fin-rows">
+        <div class="fin-row">
+          <span class="fin-label">MRR</span>
+          <span class="fin-val green">$38,500</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">New MRR</span>
+          <span class="fin-val green">+$6,200</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Churned MRR</span>
+          <span class="fin-val red">-$1,800</span>
+        </div>
+        <div class="fin-divider"></div>
+        <div class="fin-row">
+          <span class="fin-label">Team Costs</span>
+          <span class="fin-val" style="color:var(--text)">$11,200</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Tool Costs</span>
+          <span class="fin-val" style="color:var(--text)">$892</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-label">Other Expenses</span>
+          <span class="fin-val" style="color:var(--text)">$1,400</span>
+        </div>
+        <div class="fin-divider"></div>
+        <div class="fin-row" style="background:rgba(34,197,94,0.06);border-radius:8px;">
+          <span class="fin-label" style="font-weight:500;color:var(--text)">Net Profit</span>
+          <span class="fin-val green" style="font-size:17px;font-weight:600;">$25,008</span>
+        </div>
+      </div>
+      <!-- Ring chart for margin -->
+      <div style="margin-top:14px;">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 52 52">
+            <circle class="ring-circle" cx="26" cy="26" r="22"/>
+            <circle class="ring-prog" cx="26" cy="26" r="22"
+              stroke="#2b2fff"
+              stroke-dasharray="138.2"
+              stroke-dashoffset="40"
+            />
           </svg>
-        </div>
-      </div>
-      <div class="chart-box">
-        <h3>Top Regions</h3>
-        <div id="regions-list" style="display:flex;flex-direction:column;gap:10px;margin-top:4px" id="live-regions"></div>
-      </div>
-    </div>
-
-        <!-- Projects Status + Employees -->
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:20px">
-      <div class="chart-box">
-        <h3>Projects Status</h3>
-        <div style="position:relative;width:160px;height:160px;margin:16px auto">
-          <canvas id="progressDonut"></canvas>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
-            <div style="font-size:22px;font-weight:600">100</div>
-            <div style="font-size:11px;color:var(--muted)">Total projects</div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#1a6bff;margin-left:6px"></span>Completed</span><span>125 Projects</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#00d4aa;margin-left:6px"></span>In Progress</span><span>125 Projects</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d6d;margin-left:6px"></span>Cancelled</span><span>125 Projects</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffaa00;margin-left:6px"></span>Yet to Start</span><span>125 Projects</span></div>
-        </div>
-      </div>
-      <div class="table-box">
-        <h3>Employees <span class="export-btn" onclick="showAddEmp()">+ Add Employee</span></h3>
-        <table>
-          <thead><tr><th>ID</th><th>Employee Name</th><th>Email</th><th>Contact</th><th>Gender</th><th>Status</th></tr></thead>
-          <tbody id="emp-tbody">
-            <tr><td style="color:var(--muted)">1001</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a6bff,#00d4aa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">RA</div>Ricky Antony</div></td><td style="color:var(--muted)">abc@gmail.com</td><td style="color:var(--muted)">+91 123 456 7890</td><td style="color:var(--muted)">Male</td><td><span class="badge active">Active</span></td></tr>
-            <tr><td style="color:var(--muted)">1002</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ff4d6d,#ffaa00);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">SM</div>Sarah Mills</div></td><td style="color:var(--muted)">sarah@gmail.com</td><td style="color:var(--muted)">+1 555 234 5678</td><td style="color:var(--muted)">Female</td><td><span class="badge pending">Pending</span></td></tr>
-            <tr><td style="color:var(--muted)">1003</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#00d4aa,#1a6bff);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">JD</div>John Doe</div></td><td style="color:var(--muted)">john@gmail.com</td><td style="color:var(--muted)">+44 777 123 4567</td><td style="color:var(--muted)">Male</td><td><span class="badge active">Active</span></td></tr>
-            <tr><td style="color:var(--muted)">1004</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#ffaa00,#ff4d6d);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">AL</div>Anna Lee</div></td><td style="color:var(--muted)">anna@gmail.com</td><td style="color:var(--muted)">+61 400 987 654</td><td style="color:var(--muted)">Female</td><td><span class="badge active">Active</span></td></tr>
-            <tr><td style="color:var(--muted)">1005</td><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a6bff,#ff4d6d);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">MK</div>Mike Khan</div></td><td style="color:var(--muted)">mike@gmail.com</td><td style="color:var(--muted)">+92 300 111 2233</td><td style="color:var(--muted)">Male</td><td><span class="badge pending">Pending</span></td></tr>
-          </tbody>
-        </table>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px;color:var(--muted)">
-          <span>Showing 1 to 5 of 10 entries</span>
-          <div style="display:flex;gap:6px">
-            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">‹</button>
-            <button style="background:var(--blue);border:none;color:white;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">1</button>
-            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">2</button>
-            <button style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px">›</button>
+          <div>
+            <div style="font-size:20px;font-weight:600;">65%</div>
+            <div style="font-size:11px;color:var(--muted);">Profit margin</div>
+            <div style="font-size:10px;color:var(--green);margin-top:2px;">↑ 3.2% vs last month</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bottom Row: Latest Clients + Active Projects -->
-    <div class="bottom-row">
-      <div class="table-box">
-        <h3>Active Projects <span class="export-btn">Export</span></h3>
-        <table>
-          <thead><tr><th>Project</th><th>Progress</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>CRM NiChe</td><td><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div></td><td><span class="badge inprogress">In Progress</span></td></tr>
-            <tr><td>Landing Page</td><td><div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div></td><td><span class="badge pending">Pending</span></td></tr>
-            <tr><td>Mobile App</td><td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--green)"></div></div></td><td><span class="badge active">Done</span></td></tr>
-          </tbody>
-        </table>
+  </div><!-- /mid-grid -->
+
+  <!-- BOTTOM ROW -->
+  <div class="bot-grid">
+
+    <!-- ALERTS -->
+    <div class="panel fade-in fd5">
+      <div class="panel-head">
+        <span class="panel-title">System Alerts</span>
+        <span style="font-size:11px;padding:3px 9px;background:rgba(239,68,68,0.12);color:var(--red);border-radius:20px;border:1px solid rgba(239,68,68,0.2)">3 critical</span>
       </div>
-      <div class="table-box">
-        <h3>Latest Clients <span class="export-btn">View All</span></h3>
-        <table>
-          <thead><tr><th>Name</th><th>Status</th><th>Date</th></tr></thead>
-          <tbody id="clients-tbody"><tr><td colspan="3" style="color:var(--muted);text-align:center;padding:20px 0">No clients yet</td></tr></tbody>
-        </table>
+      <div class="alert-list">
+        <div class="alert-item">
+          <div class="alert-dot red"></div>
+          <div class="alert-content">
+            <div class="alert-title">Invoice overdue — TechVision Ltd</div>
+            <div class="alert-desc">April invoice of $3,000 unpaid — 8 days overdue</div>
+          </div>
+          <div class="alert-time">Now</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot red"></div>
+          <div class="alert-content">
+            <div class="alert-title">Deadline at risk — Brand Redesign</div>
+            <div class="alert-desc">Project for Nexus Corp due in 2 days — 40% complete</div>
+          </div>
+          <div class="alert-time">1h ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot red"></div>
+          <div class="alert-content">
+            <div class="alert-title">Proposal no response — GrowthLabs</div>
+            <div class="alert-desc">Proposal sent 5 days ago — auto follow-up triggered</div>
+          </div>
+          <div class="alert-time">2h ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot amber"></div>
+          <div class="alert-content">
+            <div class="alert-title">Low activity — Freelancer #7</div>
+            <div class="alert-desc">Less than 2h tracked today — idle detection triggered</div>
+          </div>
+          <div class="alert-time">3h ago</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot" style="background:var(--blue2);"></div>
+          <div class="alert-content">
+            <div class="alert-title">Lead stale — DataFlow Inc</div>
+            <div class="alert-desc">In "Contacted" stage for 3 days — reminder sent</div>
+          </div>
+          <div class="alert-time">5h ago</div>
+        </div>
       </div>
     </div>
-  </main>
 
-  <script>
-    const user = localStorage.getItem('crm_user');
-    if (!user) window.location.href = '../index.html';
-    document.getElementById('uname').textContent = 'Welcome, ' + user;
-    document.getElementById('ubadge').textContent = user;
+    <!-- ACTIVITY FEED -->
+    <div class="panel fade-in fd6">
+      <div class="panel-head">
+        <span class="panel-title">Activity Feed</span>
+        <span style="font-size:10px;color:var(--muted2)">Today</span>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="act-icon">✅</div>
+          <div class="act-content">
+            <div class="act-text"><strong>Karim M.</strong> closed a deal — <strong>$4,000</strong></div>
+            <div class="act-time">11:34 AM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon">📅</div>
+          <div class="act-content">
+            <div class="act-text"><strong>Sofia L.</strong> booked meeting with <strong>NovaTech</strong></div>
+            <div class="act-time">10:52 AM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon">🆕</div>
+          <div class="act-content">
+            <div class="act-text">New client onboarded — <strong>PixelFlow Agency</strong></div>
+            <div class="act-time">10:15 AM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon">📄</div>
+          <div class="act-content">
+            <div class="act-text">Proposal sent to <strong>GrowthLabs</strong> — $5,500/mo</div>
+            <div class="act-time">9:30 AM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon">💬</div>
+          <div class="act-content">
+            <div class="act-text"><strong>Amir R.</strong> added note on <strong>DataFlow Inc</strong></div>
+            <div class="act-time">9:08 AM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon">🚀</div>
+          <div class="act-content">
+            <div class="act-text">Campaign went live for <strong>TechVision Ltd</strong></div>
+            <div class="act-time">8:45 AM</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    const clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
-    const leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
-    const tasks = JSON.parse(localStorage.getItem('crm_tasks') || '[]');
-    document.getElementById('k-clients').textContent = clients.length;
-    document.getElementById('k-leads').textContent = leads.length;
-    document.getElementById('k-tasks').textContent = tasks.filter(t => !t.done).length;
+  </div><!-- /bot-grid -->
 
-    if (clients.length) {
-      document.getElementById('clients-tbody').innerHTML = clients.slice(-4).reverse().map(c =>
-        '<tr><td>' + c.name + '</td><td><span class="badge active">Active</span></td><td>' + (c.date||'—') + '</td></tr>'
-      ).join('');
-    }
+</main>
 
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-        datasets: [{
-          label: 'Revenue',
-          data: [30,45,28,60,75,50,80,65,90,70,85,100],
-          backgroundColor: 'rgba(26,107,255,0.6)',
-          borderColor: '#1a6bff',
-          borderWidth: 1,
-          borderRadius: 4,
-        },{
-          label: 'Expenses',
-          data: [20,30,22,40,50,35,55,45,60,48,58,70],
-          backgroundColor: 'rgba(0,212,170,0.4)',
-          borderColor: '#00d4aa',
-          borderWidth: 1,
-          borderRadius: 4,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { labels: { color: '#4a6080', font: { size: 11 } } } },
-        scales: {
-          x: { ticks: { color: '#4a6080', font: { size: 10 } }, grid: { color: '#0e2040' } },
-          y: { ticks: { color: '#4a6080', font: { size: 10 } }, grid: { color: '#0e2040' } }
-        }
-      }
-    });
-
-    const leads_data = { new: 0, contact: 0, proposal: 0, closed: 0 };
-    leads.forEach(l => { if (leads_data[l.stage] !== undefined) leads_data[l.stage]++; });
-    const donutCtx = document.getElementById('donutChart').getContext('2d');
-    new Chart(donutCtx, {
-      type: 'doughnut',
-      data: {
-        labels: ['New','Contact','Proposal','Closed'],
-        datasets: [{ data: [leads_data.new||3, leads_data.contact||5, leads_data.proposal||4, leads_data.closed||2], backgroundColor: ['#1a6bff','#00d4aa','#ffaa00','#ff4d6d'], borderWidth: 0 }]
-      },
-      options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: { legend: { position: 'bottom', labels: { color: '#4a6080', font: { size: 11 }, padding: 12 } } }
-      }
-    });
-
-    // Progress Donut
-    const pdCtx = document.getElementById('progressDonut').getContext('2d');
-    new Chart(pdCtx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Completed','In Progress','Cancelled','Yet to Start'],
-        datasets: [{ data: [125,125,125,125], backgroundColor: ['#1a6bff','#00d4aa','#ff4d6d','#ffaa00'], borderWidth: 0 }]
-      },
-      options: { responsive: true, cutout: '75%', plugins: { legend: { display: false } } }
-    });
-
-    let mapScale = 1;
-    function mapZoom(factor) {
-      mapScale *= factor;
-      mapScale = Math.min(Math.max(mapScale, 0.5), 3);
-      document.getElementById('world-svg').style.transform = 'scale(' + mapScale + ')';
-      document.getElementById('world-svg').style.transformOrigin = 'center';
-    }
-    function showAddEmp() { alert('Employee form coming soon!'); }
-
-    document.querySelectorAll('.tab').forEach(t => {
-      t.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-        t.classList.add('active');
-      });
-    });
-
-    function logout() { localStorage.removeItem('crm_user'); window.location.href = '../index.html'; }
-  </script>
+<script>
+function setTab(el){
+  document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+// Animate stat bars on load
+window.addEventListener('load',()=>{
+  document.querySelectorAll('.stat-bar,.pipe-bar').forEach(b=>{
+    const w=b.style.width;
+    b.style.width='0';
+    setTimeout(()=>{b.style.width=w;b.style.transition='width 1s ease';},200);
+  });
+});
+</script>
 </body>
 </html>
